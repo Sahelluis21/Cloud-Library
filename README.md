@@ -1,5 +1,4 @@
 # Cloud-Library
-Biblioteca de Arquivos Compartilhados em Rede
 
 # 🗂️ Biblioteca de Arquivos em Nuvem
 
