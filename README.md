@@ -34,15 +34,6 @@ Desenvolvido com **PHP puro**, **PostgreSQL** e empacotado via **Docker**, o pro
 - **Docker + Nginx** para orquestração de ambiente de produção
 
 ---
-
-## 📦 Como Executar com Docker
-
-```bash
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
-cd nome-do-repositorio
-docker-compose up --build
-
-
 📂 Estrutura do Projeto
 
 📁 php/                # Código-fonte PHP
@@ -50,4 +41,11 @@ docker-compose up --build
 📁 initdb/             # Scripts de criação do banco PostgreSQL
 📁 uploads/            # Diretório onde os arquivos são armazenados
 📄 docker-compose.yml  # Orquestração dos containers
+---
+## 📦 Como Executar com Docker
+
+```bash
+git clone https://github.com/Sahelluis21/Cloud-Library
+cd Cloud-Library
+docker-compose up --build
 
