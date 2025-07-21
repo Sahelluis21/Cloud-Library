@@ -34,7 +34,7 @@ Desenvolvido com **PHP puro**, **PostgreSQL** e empacotado via **Docker**, o pro
 
 ---
 📂 Estrutura do Projeto
-
+```bash
 📁 php/                # Código-fonte PHP
 📁 nginx/              # Configurações do servidor Nginx
 📁 initdb/             # Scripts de criação do banco PostgreSQL
