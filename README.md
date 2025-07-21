@@ -41,3 +41,13 @@ Desenvolvido com **PHP puro**, **PostgreSQL** e empacotado via **Docker**, o pro
 git clone https://github.com/seu-usuario/nome-do-repositorio.git
 cd nome-do-repositorio
 docker-compose up --build
+
+
+📂 Estrutura do Projeto
+
+📁 php/                # Código-fonte PHP
+📁 nginx/              # Configurações do servidor Nginx
+📁 initdb/             # Scripts de criação do banco PostgreSQL
+📁 uploads/            # Diretório onde os arquivos são armazenados
+📄 docker-compose.yml  # Orquestração dos containers
+
