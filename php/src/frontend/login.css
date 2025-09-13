@@ -1,0 +1,92 @@
+body {
+            background-color: rgb(133, 200, 255);  
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+            background: rgb(246, 247, 245);
+            border-radius: 40px;
+            box-shadow: 2px 2px 900px rgb(192, 191, 191);
+            
+        }
+        
+        .brand-container {
+            background-color: white;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .logo-circle {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 140, 255, 0.801);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .logo-circle img {
+            width: 80%;
+            height: auto;
+        }
+        
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            font-size: 1.8rem;
+            color:rgb(0, 140, 255, 0.801); /* Verde */
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .form-control {
+            background-color: #fafafa;
+            border: 1px solid #e0e0e0;
+            padding: 10px 15px;
+            margin-bottom: 1rem;
+        }
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #b0b0b0;
+        }
+        .btn-login {
+            background-color: rgb(255, 255, 255);
+            border: none;
+            padding: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+            color: #2d3748;
+        }
+        .btn-login:hover {
+            background-color: rgb(135, 211, 255);
+            transform: translateY(-2px);
+        }
+        .btn-login:active {
+            background-color: rgb(255, 51, 0);
+            transform: translateY(1px);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .btn-login:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgb(255, 255, 255);
+        }
+        .alert {
+            margin-bottom: 1.5rem;
+        }
+        

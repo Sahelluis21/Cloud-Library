@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./php/src:/var/www/html
+      - uploads_volume:/var/www/html/uploads
+    depends_on:
+      - php-app
+
+  php-app:
+    build: ./php
+    volumes:
+      - ./php/src:/var/www/html
+      - uploads_volume:/var/www/html/uploads
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=webupload
+      - DB_USER=webuser
+      - DB_PASSWORD=ifsp
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: ifsp
+      POSTGRES_USER: webuser
+      POSTGRES_DB: webupload
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webuser -d webupload"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  uploads_volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./uploads
+
