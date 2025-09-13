@@ -1,5 +1,5 @@
 <?php
-require (__DIR__.'/../config/db_connect.php');
+require (__DIR__.'/../model/db_connect.php');
 
 if(isset($_GET['id'])) {
     $id = $_GET['id'];

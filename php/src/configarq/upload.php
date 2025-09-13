@@ -1,6 +1,6 @@
 <?php
 session_start();
-require __DIR__ . '/../config/db_connect.php';
+require __DIR__ . '/../model/db_connect.php';
 
 // Corrige o tipo de conteúdo
 header('Content-Type: application/json');
