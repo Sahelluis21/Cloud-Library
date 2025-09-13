@@ -14,7 +14,7 @@ if(isset($_SESSION['user_id'])) {
     exit;
 }
 
-require __DIR__.'/config/db_connect.php';
+require __DIR__.'/model/db_connect.php';
 
 $error = null;
 
