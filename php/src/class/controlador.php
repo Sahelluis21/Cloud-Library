@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require __DIR__ . '/../model/db_connect.php';
 
 class Controlador {
@@ -195,4 +195,22 @@ class Controlador {
     }
 }
 
+    // Função para logout
+    public static function logout() {
+        // Limpa todas as variáveis de sessão
+        $_SESSION = [];
+
+        // Destroi a sessão
+        if (session_id() != "" || isset($_COOKIE[session_name()])) {
+            setcookie(session_name(), '', time() - 3600, '/');
+        }
+        session_destroy();
+
+        // Redireciona para a página de login
+        header('Location: ../login.php');
+        exit;
+    }
+
 }
+
+

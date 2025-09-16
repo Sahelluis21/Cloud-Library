@@ -105,7 +105,7 @@ switch ($order) {
     <div class="floating-title-logo">
         <h1 class="site-title">Cloud Library</h1>
         <div class="logo">
-            <img src="../logos/lgo library.png" alt="Logo" />
+            <img src=" /../../logos/lgo library.png" alt="Logo" />
         </div>
     </div>
  <!-- Container de Usuario -->   
@@ -118,7 +118,8 @@ switch ($order) {
             </svg>
             <span class="username">Olá, <?= htmlspecialchars($username) ?></span>
         </div>
-        <button class="logout-btn" onclick="window.location.href='../configarq/logout.php'">Sair</button>
+        <button class="logout-btn" onclick="window.location.href='/../../class/controlador.php?action=logout'">Sair</button>
+
     </div>
 <?php endif; ?>
 </div>
@@ -242,7 +243,7 @@ switch ($order) {
                         <option value="za" <?= $order === 'za' ? 'selected' : '' ?>>Nome Z → A</option>
                     </select>
 <!-- Botão de upload -->
-                      <form id="uploadForm" action="/configarq/upload.php" method="post"    enctype="multipart/form-data" class="mb-0">
+                      <form id="uploadForm" action="/../../class/controlador.php" method="post"    enctype="multipart/form-data" class="mb-0">
                          <input type="file" id="fileToUpload" name="fileToUpload" class="d-none" required />
                          <button type="button" class="upload-button" onclick="document.getElementById('fileToUpload').click()" title="Adicionar arquivo">
                             <i class="bi bi-plus-circle"></i>
@@ -311,7 +312,7 @@ switch ($order) {
 echo '<td class="text-end">';
 
 // Botão Download
-echo '<a href="../configarq/download.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline-dark me-1" title="Download">
+echo '<a href="/../../class/controlador.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline-dark me-1" title="Download">
         <i class="bi bi-download"></i>
       </a>';
 
@@ -319,12 +320,12 @@ echo '<a href="../configarq/download.php?id=' . $row['id'] . '" class="btn btn-s
 if ($view === 'pessoal') {
     if (!$row['is_shared']) {
         // Não compartilhado, ícone verde para compartilhar
-        echo '<a href="../configarq/share_file.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline-success me-1" title="Compartilhar" onclick="return confirm(\'Deseja compartilhar este arquivo?\')">
+        echo '<a href="/../../class/controlador.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline-success me-1" title="Compartilhar" onclick="return confirm(\'Deseja compartilhar este arquivo?\')">
                 <i class="bi bi-share-fill"></i>
               </a>';
     } else {
 // Ja compartilhado, ícone vermelho para cancelar compartilhamento
-        echo '<a href="../configarq/share_file.php?id=' . $row['id'] . '&action=unshare" class="btn btn-sm btn-outline-danger me-1" title="Cancelar compartilhamento" onclick="return confirm(\'Deseja cancelar o compartilhamento deste arquivo?\')">
+        echo '<a href="/../../class/controlador.php?id=' . $row['id'] . '&action=unshare" class="btn btn-sm btn-outline-danger me-1" title="Cancelar compartilhamento" onclick="return confirm(\'Deseja cancelar o compartilhamento deste arquivo?\')">
                 <i class="bi bi-share-fill"></i>
               </a>';
     }
@@ -333,7 +334,7 @@ if ($view === 'pessoal') {
 // Botão excluir
 if ($view === 'pessoal') {
     if (!$row['is_shared']) {
-echo '<a href="../configarq/delete.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline-danger" title="Excluir" onclick="return confirm(\'Tem certeza que deseja excluir?\')">
+echo '<a href="/../../class/controlador.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline-danger" title="Excluir" onclick="return confirm(\'Tem certeza que deseja excluir?\')">
         <i class="bi bi-trash"></i>
       </a>';
 
