@@ -1,7 +1,7 @@
 <?php
 //inicia a sessão e faz a conexão com o banco
 session_start();
-require __DIR__.'/../model/db_connect.php';
+require __DIR__.'/../../model/db_connect.php';
 
 //se não estiver logado ser redirecionado para o login
 if (!isset($_SESSION['user_id'])) {
@@ -90,12 +90,13 @@ switch ($order) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cloud Library</title>
-    <link rel="icon" href="../logos/logo-preta.png" type="image/png" />
+    <link rel="icon" href=" /../../logos/lgo library.png" type="image/png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../frontend/style.css" />
-    <script src="../frontend/theme-switcher.js" defer></script>
-    <script src="../configarq/upload-handler.js"></script>
+    <link rel="stylesheet" href="/../../frontend/style.css" />
+
+   <!--<script src="../frontend/theme-switcher.js" defer></script>// congelado para quando formos adicionar a feature
+    <script src="../configarq/upload-handler.js"></script> // congelado para quando formos adicionar a feature -->
 
 </head>
 <body>

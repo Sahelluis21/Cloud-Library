@@ -10,7 +10,7 @@ header("Pragma: no-cache");
 
 // Redirecionamento se logado
 if(isset($_SESSION['user_id'])) {
-    header("Location: /home/index.php");
+    header("Location: /view/home/index.php");
     exit;
 }
 
