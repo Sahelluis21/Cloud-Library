@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['username'] = $user['username'];
                     session_regenerate_id(true);
-                    header("Location: ../home/index.php");
+                    header("Location: ../view/home/index.php");
                     exit;
                 } else {
                     error_log("Falha na verificação da senha para usuário: " . $username);
