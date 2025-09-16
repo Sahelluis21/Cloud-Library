@@ -1,7 +1,7 @@
 <?php
 //inicia a sessão e faz a conexão com o banco
 session_start();
-require __DIR__.'/../config/db_connect.php';
+require __DIR__.'/../model/db_connect.php';
 
 //se não estiver logado ser redirecionado para o login
 if (!isset($_SESSION['user_id'])) {
