@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         <!-- Para cadastrar novos usuarios -->
         <div class="mt-3 text-center">
-            <a href="/../../controller/registro.php" class="btn btn-login w-100">Cadastrar novo usuário</a>
+            <a href="/registro.html" class="btn btn-login w-100">Cadastrar novo usuário</a>
         </div>
     </div>
 </body>
