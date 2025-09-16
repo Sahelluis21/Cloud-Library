@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['username'] = $user['username'];
                     session_regenerate_id(true);
-                    header("Location: ../view/home/index.php");
+                    header("Location: ../home/index.php");
                     exit;
                 } else {
                     error_log("Falha na verificação da senha para usuário: " . $username);
@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         <!-- Para cadastrar novos usuarios -->
         <div class="mt-3 text-center">
-            <a href="home/registro.html" class="btn btn-login w-100">Cadastrar novo usuário</a>
+            <a href="/../../controller/registro.php" class="btn btn-login w-100">Cadastrar novo usuário</a>
         </div>
     </div>
 </body>
