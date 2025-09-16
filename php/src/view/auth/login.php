@@ -10,11 +10,11 @@ header("Pragma: no-cache");
 
 // Redirecionamento se logado
 if(isset($_SESSION['user_id'])) {
-    header("Location: /view/home/index.php");
+    header("Location: ../home/index.php");
     exit;
 }
 
-require __DIR__.'/model/db_connect.php';
+require __DIR__.'/../../model/db_connect.php';
 
 $error = null;
 
