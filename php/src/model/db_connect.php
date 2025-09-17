@@ -1,6 +1,4 @@
 <?php
-// config/db_connect.php
-
 
 $host = getenv('DB_HOST') ?: 'localhost';
 $dbname = getenv('DB_NAME') ?: 'webupload';
