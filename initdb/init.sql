@@ -1,13 +1,12 @@
-
-					
-
-CREATE TABLE users (
+-- Criação da tabela de usuários
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
     password_hash TEXT NOT NULL
 );
 
-CREATE TABLE uploaded_files (
+-- Criação da tabela de arquivos
+CREATE TABLE IF NOT EXISTS uploaded_files (
     id SERIAL PRIMARY KEY,
     file_name TEXT NOT NULL,
     file_path TEXT NOT NULL,
@@ -18,7 +17,8 @@ CREATE TABLE uploaded_files (
     is_shared BOOLEAN DEFAULT FALSE
 );
 
-INSERT INTO users (username, password_hash) VALUES (
-    'admin',
-    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'  -- hash da senha "password"
-);
+-- Inserir usuário admin (senha: password)
+-- O hash abaixo é do bcrypt
+INSERT INTO users (username, password_hash)
+VALUES ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi')
+ON CONFLICT (username) DO NOTHING;

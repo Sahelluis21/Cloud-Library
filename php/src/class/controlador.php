@@ -188,7 +188,7 @@ class Controlador {
     $stmt = $this->conn->prepare("INSERT INTO users (username, password_hash) VALUES (?, ?)");
     if ($stmt->execute([$username, $hash])) {
         echo "Usuário cadastrado com sucesso!";
-        header("Location: ../login.php"); // Descomente para redirecionar
+        header("Location: ../view/auth/login.php"); // Descomente para redirecionar
         exit;
     } else {
         echo "Erro ao cadastrar usuário.";
@@ -207,7 +207,7 @@ class Controlador {
         session_destroy();
 
         // Redireciona para a página de login
-        header('Location: ../login.php');
+        header('Location: ../view/auth/login.php');
         exit;
     }
 
