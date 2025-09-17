@@ -2,15 +2,22 @@
 // public/index.php
 session_start();
 
-// Autoload (ou require de cada controller)
-require __DIR__ . '/../controller/homecontroller.php';
+$uri = $_SERVER['REQUEST_URI'];
 
-// Redireciona para login se não estiver logado
-//if (!isset($_SESSION['user_id'])) {
-//    header("Location: ../view/login.php");
-//    exit;
-//}
-
-// Cria o controlador e chama a ação padrão
-$controller = new HomeController();
-$controller->index();
+if ($uri === '/login') {
+    require_once __DIR__ . '/../controller/authcontroller.php';
+    $controller = new AuthController();
+    $controller->login();
+} elseif ($uri === '/logout') {
+    require_once __DIR__ . '/../controller/authcontroller.php';
+    $controller = new AuthController();
+    $controller->logout();
+} else {
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: /login");
+        exit;
+    }
+    require_once __DIR__ . '/../controller/homecontroller.php';
+    $controller = new HomeController();
+    $controller->index();
+}
