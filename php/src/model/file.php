@@ -12,14 +12,27 @@ class File {
     }
 
     public function getFiles($userId, $view, $order) {
-        $orderBy = match($order) {
-            'oldest' => 'upload_date ASC',
-            'largest' => 'file_size DESC',
-            'smallest' => 'file_size ASC',
-            'az' => 'file_name ASC',
-            'za' => 'file_name DESC',
-            default => 'upload_date DESC',
-        };
+        // Substituindo o match (PHP 8) por switch (compatível com PHP 7)
+        switch ($order) {
+            case 'oldest':
+                $orderBy = 'upload_date ASC';
+                break;
+            case 'largest':
+                $orderBy = 'file_size DESC';
+                break;
+            case 'smallest':
+                $orderBy = 'file_size ASC';
+                break;
+            case 'az':
+                $orderBy = 'file_name ASC';
+                break;
+            case 'za':
+                $orderBy = 'file_name DESC';
+                break;
+            default:
+                $orderBy = 'upload_date DESC';
+                break;
+        }
 
         if ($view === 'pessoal') {
             $stmt = $this->conn->prepare("
@@ -65,9 +78,9 @@ class File {
     }
 
     public static function getFriendlyFileType($mime) {
-        if (strpos($mime, 'image/') === 0) return 'JPEG';
+        if (strpos($mime, 'image/') === 0) return 'Imagem';
         if ($mime === 'application/pdf') return 'PDF';
-        if (strpos($mime, 'video/') === 0) return 'MP4';
+        if (strpos($mime, 'video/') === 0) return 'Vídeo';
         if (strpos($mime, 'application/vnd.openxmlformats-officedocument') === 0) return 'Documento Office';
         return 'Outro';
     }
