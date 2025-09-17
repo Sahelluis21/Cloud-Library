@@ -3,6 +3,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+
 // Headers
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -76,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <div class="brand-container">
             <div class="logo-circle">
-                <img src="logos/lgo library.png" alt="logo" />
+                <img src="/../logos/lgo library.png" alt="logo" />
             </div>
             <h1 class="brand-name">Cloud Library</h1>
         </div>
