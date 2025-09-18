@@ -25,12 +25,12 @@ class AuthController {
                 $error = "Usuário ou senha inválidos!";
             }
         }
-        require __DIR__ . '/../view/auth/login.php';
+        require __DIR__ . '/../public/auth/login.php';
     }
 
     public function logout() {
         User::logout();
-        header("Location: /login");
+        header("Location: /auth/login.php");
         exit;
     }
 }
