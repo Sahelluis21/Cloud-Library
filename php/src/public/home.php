@@ -1,19 +1,13 @@
-<?php
-// view/home.php
-// Variáveis esperadas do HomeController:
-// $username, $files, $diskUsage, $view, $order
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cloud Library</title>
-    <link rel="icon" href="/../../logos/lgo library.png" type="image/png" />
+    <link rel="icon" href="../public/logos/lgo library.png" type="image/png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="/../../frontend/style.css" />
+    <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
 
@@ -34,7 +28,7 @@
                 </svg>
                 <span class="username">Olá, <?= htmlspecialchars($username) ?></span>
             </div>
-            <button class="logout-btn" onclick="window.location.href='/../../class/controlador.php?action=logout'">Sair</button>
+            <button class="logout-btn" onclick="window.location.href='logout.php?action=logout'">Sair</button>
         </div>
     <?php endif; ?>
 </div>
@@ -57,7 +51,8 @@
 <?php endif; ?>
 
 <!-- Sidebar -->
-<?php include __DIR__ . '/templates/sidebar.php'; ?>
+  <?php //include __DIR__ . '../view/templates/sidebar.php'; ?> 
+ 
 
 <!-- Main Content -->
 <div class="main-content">

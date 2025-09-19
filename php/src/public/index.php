@@ -14,7 +14,7 @@ if ($uri === '/login') {
     $controller->logout();
 } else {
     if (!isset($_SESSION['user_id'])) {
-        header("Location: /login");
+        header("Location: /auth/login.php");
         exit;
     }
     require_once __DIR__ . '/../controller/homecontroller.php';
