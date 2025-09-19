@@ -2,15 +2,15 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <title>Login - Cloud Library </title>
+    <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
     <h2>Login</h2>
     <?php if (!empty($error)): ?>
         <p style="color:red;"><?= htmlspecialchars($error) ?></p>
     <?php endif; ?>
-    <form method="post" action="">
+    <form method="POST" action="/login">
         <label>Usuário:</label>
         <input type="text" name="username" required>
         <br>
