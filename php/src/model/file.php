@@ -12,7 +12,7 @@ class File {
     }
 
     public function getFiles($userId, $view, $order) {
-        // Substituindo o match (PHP 8) por switch (compatível com PHP 7)
+       
         switch ($order) {
             case 'oldest':
                 $orderBy = 'upload_date ASC';
