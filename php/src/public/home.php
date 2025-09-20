@@ -112,12 +112,29 @@
                             <option value="za" <?= $order === 'za' ? 'selected' : '' ?>>Nome Z → A</option>
                         </select>
 
-                        <form id="uploadForm" action="/../../class/controlador.php" method="post" enctype="multipart/form-data" class="mb-0">
-                            <input type="file" id="fileToUpload" name="fileToUpload" class="d-none" required />
-                            <button type="button" class="upload-button" onclick="document.getElementById('fileToUpload').click()" title="Adicionar arquivo">
-                                <i class="bi bi-plus-circle"></i>
-                            </button>
-                        </form>
+                        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" class="mb-0">
+    <input type="file" id="fileToUpload" name="fileToUpload" class="d-none" required />
+    <button type="button" class="upload-button" title="Adicionar arquivo">
+        <i class="bi bi-plus-circle"></i>
+    </button>
+</form>
+
+<script>
+    const fileInput = document.getElementById('fileToUpload');
+    const uploadButton = document.querySelector('.upload-button');
+    const form = document.getElementById('uploadForm');
+
+    // Abre o seletor de arquivos
+    uploadButton.addEventListener('click', () => fileInput.click());
+
+    // Envia o formulário assim que o usuário escolher o arquivo
+    fileInput.addEventListener('change', () => {
+        if(fileInput.files.length > 0) {
+            form.submit();
+        }
+    });
+</script>
+
                     </div>
                 </div>
 
@@ -147,18 +164,18 @@
                                         <td><?= File::formatSize($file['file_size']) ?></td>
                                         <td><?= date('d/m/Y H:i', strtotime($file['upload_date'])) ?></td>
                                         <td class="text-end">
-                                            <a href="/../../class/controlador.php?id=<?= $file['id'] ?>" class="btn btn-sm btn-outline-dark me-1" title="Download"><i class="bi bi-download"></i></a>
+                                            <a href="../class/controlador.php?id=<?= $file['id'] ?>" class="btn btn-sm btn-outline-dark me-1" title="Download"><i class="bi bi-download"></i></a>
 
                                             <?php if ($view === 'pessoal'): ?>
                                                 <?php if (!$file['is_shared']): ?>
-                                                    <a href="/../../class/controlador.php?id=<?= $file['id'] ?>" class="btn btn-sm btn-outline-success me-1" title="Compartilhar" onclick="return confirm('Deseja compartilhar este arquivo?')">
+                                                    <a href="../class/controlador.php?id=<?= $file['id'] ?>" class="btn btn-sm btn-outline-success me-1" title="Compartilhar" onclick="return confirm('Deseja compartilhar este arquivo?')">
                                                         <i class="bi bi-share-fill"></i>
                                                     </a>
-                                                    <a href="/../../class/controlador.php?id=<?= $file['id'] ?>" class="btn btn-sm btn-outline-danger" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?')">
+                                                    <a href="../class/controlador.php?id=<?= $file['id'] ?>" class="btn btn-sm btn-outline-danger" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?')">
                                                         <i class="bi bi-trash"></i>
                                                     </a>
                                                 <?php else: ?>
-                                                    <a href="/../../class/controlador.php?id=<?= $file['id'] ?>&action=unshare" class="btn btn-sm btn-outline-danger me-1" title="Cancelar compartilhamento" onclick="return confirm('Deseja cancelar o compartilhamento deste arquivo?')">
+                                                    <a href="../class/controlador.php?id=<?= $file['id'] ?>&action=unshare" class="btn btn-sm btn-outline-danger me-1" title="Cancelar compartilhamento" onclick="return confirm('Deseja cancelar o compartilhamento deste arquivo?')">
                                                         <i class="bi bi-share-fill"></i>
                                                     </a>
                                                 <?php endif; ?>

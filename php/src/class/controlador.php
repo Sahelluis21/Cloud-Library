@@ -8,7 +8,8 @@ class Controlador {
 
     public function __construct($conn) {
         $this->conn = $conn;
-        $this->uploadDir = realpath(__DIR__ . '/../../uploads/') . '/';
+        $this->uploadDir = realpath(__DIR__ . '../uploads/
+') . '/';
 
         if (!file_exists($this->uploadDir)) {
             mkdir($this->uploadDir, 0777, true);
@@ -168,5 +169,28 @@ class Controlador {
 
 
 }
+
+// === Código de execução do upload ===
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // ID do usuário logado na sessão
+    $userId = $_SESSION['user_id'] ?? null;
+
+    // Cria a instância do controlador
+    $controlador = new Controlador($conn);
+
+    // Chama o método upload
+    $result = $controlador->upload($_FILES, $userId);
+
+    // Retorna JSON
+    header('Content-Type: application/json');
+    echo json_encode($result);
+    exit;
+} else {
+    // Método não permitido
+    http_response_code(405);
+    echo json_encode(['success' => false, 'error' => 'Método não permitido']);
+    exit;
+}
+
 
 

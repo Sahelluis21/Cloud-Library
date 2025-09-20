@@ -1,27 +1,24 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Login - Cloud Library</title>
-    <link rel="stylesheet" href="../assets/style.css">
-</head>
 <body>
-    <h2>Login</h2>
-    <?php if (!empty($error)): ?>
-        <p style="color:red;"><?= htmlspecialchars($error) ?></p>
-    <?php endif; ?>
-    <form method="POST" action="/login">
-        <label>Usuário:</label>
-        <input type="text" name="username" required>
-        <br>
-        <label>Senha:</label>
-        <input type="password" name="password" required>
-        <br>
-        <button type="submit">Entrar</button>
-    </form>
+    <div class="login-container">
+        <div class="brand-container">
+            <div class="logo-circle">
+                <img src="../assets/logo.png" alt="Logo">
+            </div>
+            <h1 class="brand-name">Cloud Library</h1>
+        </div>
 
-    <form method="GET" action="/register" style="margin-top: 10px;">
-        <button type="submit">Cadastrar</button>
-    </form>
+        <?php if (!empty($error)): ?>
+            <p class="alert"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
+
+        <form method="POST" action="/login">
+            <input class="form-control" type="text" name="username" placeholder="Usuário" required>
+            <input class="form-control" type="password" name="password" placeholder="Senha" required>
+            <button type="submit" class="btn-login">Entrar</button>
+        </form>
+
+        <form method="GET" action="/register">
+            <button type="submit" class="btn-login">Cadastrar</button>
+        </form>
+    </div>
 </body>
-</html>
