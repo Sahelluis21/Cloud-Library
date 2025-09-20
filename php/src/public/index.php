@@ -21,3 +21,13 @@ if ($uri === '/login') {
     $controller = new HomeController();
     $controller->index();
 }
+if ($uri === '/upload' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    require __DIR__ . '/../class/controlador.php';
+    $controlador = new Controlador($conn);
+    $userId = $_SESSION['user_id'] ?? null;
+    $result = $controlador->upload($_FILES, $userId);
+
+    header('Content-Type: application/json');
+    echo json_encode($result);
+    exit;
+}
