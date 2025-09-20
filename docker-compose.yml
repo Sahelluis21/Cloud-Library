@@ -20,9 +20,10 @@ services:
       - ./php/src:/var/www/html
       - uploads_volume:/var/www/html/uploads
     environment:
-      - DB_HOST=${DB_HOST}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASSWORD}
+    - DB_HOST=${DB_HOST}
+    - DB_NAME=${DB_NAME}
+    - DB_USER=${DB_USER}
+    - DB_PASSWORD=${DB_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
