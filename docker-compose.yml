@@ -20,10 +20,9 @@ services:
       - ./php/src:/var/www/html
       - uploads_volume:/var/www/html/uploads
     environment:
-      - DB_HOST=postgres
-      - DB_NAME=webupload
-      - DB_USER=webuser
-      - DB_PASSWORD=ifsp
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
     depends_on:
       postgres:
         condition: service_healthy
@@ -31,9 +30,9 @@ services:
   postgres:
     image: postgres:13
     environment:
-      POSTGRES_PASSWORD: ifsp
-      POSTGRES_USER: webuser
-      POSTGRES_DB: webupload
+      POSTGRES_PASSWORD=${DB_PASS}
+      POSTGRES_USER=${DB_USER}
+      POSTGRES_DB=${DB_NAME}
     ports:
       - "127.0.0.1:5433:5432"
     volumes:
