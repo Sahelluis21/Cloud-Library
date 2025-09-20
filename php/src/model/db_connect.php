@@ -1,9 +1,9 @@
 <?php
 
-$host = getenv('DB_HOST') ?: 'localhost';
-$dbname = getenv('DB_NAME') ?: 'webupload';
-$user = getenv('DB_USER') ?: 'webuser';
-$password = getenv('DB_PASSWORD') ?: 'ifsp';
+$host = getenv('DB_HOST'); 
+$dbname = getenv('DB_NAME'); 
+$user = getenv('DB_USER'); 
+$password = getenv('DB_PASSWORD'); 
 
 try {
     $conn = new PDO(
