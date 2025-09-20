@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Cloud Library </title>
+    <title>Login - Cloud Library</title>
     <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -18,6 +18,10 @@
         <input type="password" name="password" required>
         <br>
         <button type="submit">Entrar</button>
+    </form>
+
+    <form method="GET" action="/register" style="margin-top: 10px;">
+        <button type="submit">Cadastrar</button>
     </form>
 </body>
 </html>
