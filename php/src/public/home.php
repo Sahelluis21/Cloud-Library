@@ -112,6 +112,7 @@
                             <option value="za" <?= $order === 'za' ? 'selected' : '' ?>>Nome Z → A</option>
                         </select>
 
+
                         <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" class="mb-0">
     <input type="file" id="fileToUpload" name="fileToUpload" class="d-none" required />
     <button type="button" class="upload-button" title="Adicionar arquivo">
@@ -137,7 +138,7 @@
 
                     </div>
                 </div>
-
+          
                 <div class="table-responsive">
                     <?php if (!empty($files)): ?>
                         <table class="table table-hover align-middle">
