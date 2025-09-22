@@ -15,6 +15,7 @@ services:
 
   php-app:
     build: ./php
+    user: "${UID}:${GID}"
     volumes:
       - ./php/src:/var/www/html
     environment:
@@ -46,10 +47,5 @@ services:
 
 volumes:
   postgres_data:
-  uploads_volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./uploads
+
 
