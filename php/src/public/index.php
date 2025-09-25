@@ -21,3 +21,17 @@ if ($uri === '/login') {
     $controller = new HomeController();
     $controller->index();
 }
+if ($uri === '/upload' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once __DIR__ . '/../class/controlador.php';
+
+    if (!isset($conn)) {
+        require_once __DIR__ . '/../model/db_connect.php';
+    }
+
+    $controlador = new Controlador($conn);
+    $userId = $_SESSION['user_id'] ?? null;
+
+    $result = $controlador->upload($_FILES, $userId);
+
+    exit;
+}
