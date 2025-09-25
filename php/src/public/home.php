@@ -112,7 +112,7 @@
                             <option value="za" <?= $order === 'za' ? 'selected' : '' ?>>Nome Z → A</option>
                         </select>
 
-<<<<<<< HEAD
+
                             <form id="uploadForm" action="/../../class/controlador.php" method="post" enctype="multipart/form-data" class="mb-0">
 
                             <input type="file" id="fileToUpload" name="fileToUpload" class="d-none" required />
@@ -124,16 +124,7 @@
                             </button>
 
                         </form>
-                       
-=======
-
-                        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" class="mb-0">
-    <input type="file" id="fileToUpload" name="fileToUpload" class="d-none" required />
-    <button type="button" class="upload-button" title="Adicionar arquivo">
-        <i class="bi bi-plus-circle"></i>
-    </button>
-</form>
-
+                    
 <script>
     const fileInput = document.getElementById('fileToUpload');
     const uploadButton = document.querySelector('.upload-button');
