@@ -57,6 +57,7 @@
 <!-- Main Content -->
 <div class="main-content">
     <div class="dual-layout-container">
+        <!-- Left Side -->
         <div class="left-side">
             <div class="help-container">
                 <div class="help-area">
@@ -98,6 +99,7 @@
             </div>
         </div>
 
+        <!-- Right Side -->
         <div class="right-side">
             <div class="documents-container">
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -112,32 +114,17 @@
                             <option value="za" <?= $order === 'za' ? 'selected' : '' ?>>Nome Z → A</option>
                         </select>
 
-                            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" class="mb-0">
-                                <input type="file" id="fileToUpload" name="file" class="d-none" required />
+                        <!-- Upload Form -->
+                        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" class="mb-0">
+                            <input type="file" id="fileToUpload" name="file" class="d-none" required />
                             <button type="button" class="upload-button" onclick="document.getElementById('fileToUpload').click()" title="Adicionar arquivo">
                                 <i class="bi bi-plus-circle"></i>
                             </button>
                         </form>
-
-<script>
-    const fileInput = document.getElementById('fileToUpload');
-    const uploadButton = document.querySelector('.upload-button');
-    const form = document.getElementById('uploadForm');
-
-    // Abre o seletor de arquivos
-    uploadButton.addEventListener('click', () => fileInput.click());
-
-    // Envia o formulário assim que o usuário escolher o arquivo
-    fileInput.addEventListener('change', () => {
-        if(fileInput.files.length > 0) {
-            form.submit();
-        }
-    });
-</script>
-
                     </div>
                 </div>
-        
+
+                <!-- Table of Files -->
                 <div class="table-responsive">
                     <?php if (!empty($files)): ?>
                         <table class="table table-hover align-middle">
@@ -197,7 +184,25 @@
         </div>
     </div>
 </div>
+
+<!-- Scripts -->
+<script>
+    // Envia o form automaticamente após selecionar um arquivo
+    const fileInput = document.getElementById('fileToUpload');
+    const uploadForm = document.getElementById('uploadForm');
+
+    fileInput.addEventListener('change', function() {
+        if (fileInput.files.length > 0) {
+            uploadForm.submit();
+        }
+    });
+
+    // Função de ordenação placeholder
+    function applySort() {
+        // implementar lógica de ordenação aqui
+    }
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
