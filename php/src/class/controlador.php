@@ -45,6 +45,7 @@ class Controlador {
         $targetFile = $this->uploadDir . $fileName;
 
         if (!move_uploaded_file($file['tmp_name'], $targetFile)) {
+            error_log("Falha ao mover {$file['tmp_name']} para {$targetFile}");
             return ['success' => false, 'error' => 'Falha ao mover o arquivo'];
         }
 
