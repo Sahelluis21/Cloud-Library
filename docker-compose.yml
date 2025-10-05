@@ -18,6 +18,7 @@ services:
     user: "${UID}:${GID}"
     volumes:
       - ./php/src:/var/www/html
+      - ./uploads:/var/www/html/uploads
     environment:
     - DB_HOST=${DB_HOST}
     - DB_NAME=${DB_NAME}
