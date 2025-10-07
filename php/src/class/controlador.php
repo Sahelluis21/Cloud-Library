@@ -10,7 +10,7 @@ class Controlador {
         $this->conn = $conn;
 
         // Caminho dentro do container, mapeado para a pasta externa no host
-        $this->uploadDir = '/var/www/html/uploads/';
+        $this->uploadDir =  __DIR__ . '/../../../../uploads/';
 
         // Cria a pasta se não existir (segurança)
         if (!is_dir($this->uploadDir)) {
