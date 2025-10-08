@@ -15,10 +15,9 @@ services:
 
   php-app:
     build: ./php
-    user: "${UID}:${GID}"
     volumes:
       - ./php/src:/var/www/html
-      - ./uploads:/var/www/html/uploads
+      - ./uploads:/var/www/uploads
     environment:
     - DB_HOST=${DB_HOST}
     - DB_NAME=${DB_NAME}
