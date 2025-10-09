@@ -17,6 +17,7 @@ services:
 
   php-app:
     build: ./php
+    user: "1000:1000"
     volumes:
       - ./php/src:/var/www/html
       - ./uploads:/var/www/html/storage/app/public/uploads
