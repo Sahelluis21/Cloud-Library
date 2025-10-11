@@ -18,11 +18,22 @@ RUN apt-get update && \
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin --filename=composer
 
+# instalando o psql para testar    
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libpq-dev \
+        postgresql-client \
+    && docker-php-ext-install pdo pdo_pgsql \
+    && rm -rf /var/lib/apt/lists/*
+
+
 # Define o diretório de trabalho
 WORKDIR /var/www/html
 
 # Copia o código PHP 
 COPY src/ .
+
+COPY src/.env .
 
 # Ajusta permissões (libera geral — para desenvolvimento)
 RUN chmod -R 777 /var/www/html
