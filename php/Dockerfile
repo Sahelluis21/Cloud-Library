@@ -1,5 +1,5 @@
 # Usa a imagem base do PHP 7.4 com FPM
-FROM php:7.4-fpm
+FROM php:8.1-fpm
 
 # Define o usuário como root (em prod somente)
 USER root
