@@ -1,36 +1,23 @@
 <?php
-// controller/AuthController.php
-require_once __DIR__ . '/../model/user.php';
 
-class AuthController {
-    private $userModel;
+namespace App\Http\Controllers;
 
-    public function __construct() {
-        $this->userModel = new User();
+use Illuminate\Http\Request;
+
+class AuthController extends Controller
+{
+    public function showLogin()
+    {
+        return view('login'); // sua view login.blade.php
     }
 
-    public function login() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-
-            $user = $this->userModel->login($username, $password);
-
-            if ($user) {
-                session_start();
-                $_SESSION['user_id'] = $user['id'];
-                header("Location: /"); // vai para Home
-                exit;
-            } else {
-                $error = "Usuário ou senha inválidos!";
-            }
-        }
-        require __DIR__ . '/../public/auth/login.php';
+    public function login(Request $request)
+    {
+        // lógica de login
     }
 
-    public function logout() {
-        User::logout();
-        header("Location: /auth/login.php");
-        exit;
+    public function logout(Request $request)
+    {
+        // logout
     }
 }

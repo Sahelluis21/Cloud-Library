@@ -1,5 +1,8 @@
-require_once __DIR__ . '/../controller/AuthController.php';
-require_once __DIR__ . '/../controller/HomeController.php';
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 
 Route::get('/login', [AuthController::class, 'showLogin']);
 Route::post('/login', [AuthController::class, 'login']);
