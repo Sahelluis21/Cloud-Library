@@ -3,7 +3,6 @@ FROM php:8.1-fpm
 
 # Define o usuário como root (em prod somente)
 USER root
-
 # Atualiza pacotes e instala dependencias
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -37,6 +36,7 @@ COPY src/.env .
 
 # Ajusta permissões (libera geral — para desenvolvimento)
 RUN chmod -R 777 /var/www/html
+
 
 # Configurações para uploads grandes
 RUN { \
