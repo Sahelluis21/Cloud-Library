@@ -8,14 +8,9 @@ use Throwable;
 class Handler extends ExceptionHandler
 {
     /**
-     * A lista de tipos de exceções que não devem ser reportadas.
-     */
-    protected $dontReport = [
-        //
-    ];
-
-    /**
-     * A lista de entradas que não devem ser exibidas em validações.
+     * The list of the inputs that are never flashed to the session on validation exceptions.
+     *
+     * @var array<int, string>
      */
     protected $dontFlash = [
         'current_password',
@@ -24,18 +19,12 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Reporta ou loga uma exceção.
+     * Register the exception handling callbacks for the application.
      */
-    public function report(Throwable $exception)
+    public function register(): void
     {
-        parent::report($exception);
-    }
-
-    /**
-     * Renderiza uma exceção para uma resposta HTTP.
-     */
-    public function render($request, Throwable $exception)
-    {
-        return parent::render($request, $exception);
+        $this->reportable(function (Throwable $e) {
+            //
+        });
     }
 }
