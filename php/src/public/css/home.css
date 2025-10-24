@@ -1,0 +1,287 @@
+/* ============================ */
+/* 🌙 CLOUD LIBRARY - HOME PAGE */
+/* ============================ */
+
+/* --------- RESET BÁSICO --------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", "Poppins", sans-serif;
+}
+
+body {
+    background-color: #101014;
+    color: #f3f3f3;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* --------- CONTAINER PRINCIPAL --------- */
+.layout-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/* ============================ */
+/*        SIDEBAR ESQUERDA      */
+/* ============================ */
+.sidebar {
+    width: 300px;
+    background: #18181d;
+    border-right: 1px solid #2c2c34;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem 1.5rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+/* Cabeçalho da sidebar */
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.sidebar-header .logo {
+    width: 70px;
+    height: auto;
+    margin-bottom: 0.8rem;
+}
+
+.sidebar-header .site-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Navegação da biblioteca */
+.library-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.nav-btn {
+    background: #23232a;
+    color: #ddd;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+    background: #2d2d36;
+}
+
+.nav-btn.active {
+    background: #005cfb;
+    color: #fff;
+}
+
+/* Seção de armazenamento */
+.storage-section {
+    margin-top: 2rem;
+}
+
+.storage-section h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+    color: #b5b5b5;
+}
+
+.storage-progress {
+    width: 100%;
+    height: 10px;
+    background: #2a2a33;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.storage-progress-filled {
+    height: 100%;
+    background: linear-gradient(90deg, #007bff, #00a8ff);
+    transition: width 0.3s ease-in-out;
+}
+
+.storage-details {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-top: 0.4rem;
+}
+
+/* Seção de informações */
+.info-section {
+    margin-top: 2rem;
+}
+
+.info-section h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+    color: #b5b5b5;
+}
+
+.info-section ul {
+    list-style: none;
+    line-height: 1.6;
+}
+
+.info-section li::before {
+    content: "• ";
+    color: #007bff;
+}
+
+/* ============================ */
+/*        ÁREA PRINCIPAL        */
+/* ============================ */
+.main-content {
+    margin-left: 300px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+/* Cabeçalho principal */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.user-icon {
+    color: #007bff;
+}
+
+.username {
+    font-weight: 500;
+    color: #ddd;
+}
+
+.logout-btn {
+    background: #2d2d36;
+    color: #f3f3f3;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: #3d3d48;
+}
+
+/* ============================ */
+/*        DOCUMENTOS / ARQUIVOS */
+/* ============================ */
+.documents-container {
+    background: #18181d;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+}
+
+.documents-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.documents-header h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.documents-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+/* Select e botão de upload */
+.form-select {
+    background: #23232a;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.9rem;
+}
+
+.upload-button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 0.7rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s ease;
+}
+
+.upload-button:hover {
+    background: #3395ff;
+}
+
+/* Lista de arquivos */
+.file-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.file-list p {
+    text-align: center;
+    color: #777;
+}
+
+/* ============================ */
+/*          RESPONSIVIDADE      */
+/* ============================ */
+@media (max-width: 900px) {
+    .sidebar {
+        width: 230px;
+        padding: 1.5rem;
+    }
+
+    .main-content {
+        margin-left: 230px;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .layout-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #2c2c34;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}
