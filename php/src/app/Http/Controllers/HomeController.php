@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UploadedFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,8 +13,11 @@ class HomeController extends Controller
    
 public function index()
 {
-    return view('home'); // ou o nome correto da sua view
+    $files = UploadedFile::orderBy('upload_date', 'desc')->get();
+
+    return view('home', compact('files'));
 }
+
 
 
 public function upload(Request $request)
