@@ -66,41 +66,70 @@
             </form>
         </header>
 
-        <!-- Conteúdo principal -->
-        <section class="documents-container">
-            <div class="documents-header">
-                <h2>Arquivos Disponíveis ☁️</h2>
+       <!-- Conteúdo principal -->
+<section class="documents-container">
+    <div class="documents-header">
+        <h2>Arquivos Disponíveis ☁️</h2>
 
-                <div class="documents-controls">
-                    <select id="sortOrder" class="form-select">
-                        <option value="newest">Últimos adicionados</option>
-                        <option value="oldest">Primeiros adicionados</option>
-                        <option value="largest">Maior tamanho</option>
-                        <option value="smallest">Menor tamanho</option>
-                        <option value="az">Nome A → Z</option>
-                        <option value="za">Nome Z → A</option>
-                    </select>
+        <div class="documents-controls">
+            <!-- Filtro de ordenação -->
+            <select id="sortOrder" class="form-select">
+                <option value="newest">Últimos adicionados</option>
+                <option value="oldest">Primeiros adicionados</option>
+                <option value="largest">Maior tamanho</option>
+                <option value="smallest">Menor tamanho</option>
+                <option value="az">Nome A → Z</option>
+                <option value="za">Nome Z → A</option>
+            </select>
 
-                    <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <input type="file" name="arquivo" required>
-                        <button type="submit">Enviar</button>
-                    </form>
+            <!-- Formulário de upload -->
+            <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="file" name="arquivo" required>
+                <button type="submit">Enviar</button>
+            </form>
 
-                    @if (session('success'))
-                        <p style="color:green;">{{ session('success') }}</p>
-                    @endif
+            @if (session('success'))
+                <p style="color:green;">{{ session('success') }}</p>
+            @endif
+        </div>
+    </div>
 
-                </div>
-            </div>
+    <!-- Lista de arquivos -->
+    <div class="file-list">
+        <table border="1" cellpadding="8" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Tamanho</th>
+                    <th>Tipo</th>
+                    <th>Data de Upload</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($files as $file)
+                    <tr>
+                        <td>
+                            <a href="{{ asset('uploads/' . basename($file->file_path)) }}" target="_blank">
+                                {{ $file->file_name }}
+                            </a>
+                        </td>
+                        <td>{{ number_format($file->file_size / 1024, 2) }} KB</td>
+                        <td>{{ $file->file_type }}</td>
+                        <td>{{ $file->upload_date }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" style="text-align:center;">
+                            Nenhum arquivo encontrado.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</section>
 
-            <!-- Lista de arquivos -->
-            <div class="file-list">
-                <p>Nenhum arquivo encontrado.</p>
-            </div>
-        </section>
-    </main>
-</div>
 
 </body>
 </html>

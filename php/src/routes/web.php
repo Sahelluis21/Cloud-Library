@@ -9,7 +9,7 @@ Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
 Route::get('/login', [AuthController::class, 'showlogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', function() {
     return view('dashboard');
 })->middleware('auth');
