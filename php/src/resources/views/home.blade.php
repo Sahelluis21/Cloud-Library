@@ -13,11 +13,10 @@
 
     <!-- ============================ SIDEBAR (ESQUERDA) ============================ -->
     <aside class="sidebar">
-        <!-- Logo e título -->
+        <!-- Logo  -->
         <div class="sidebar-header">
             <h1 class="site-title">Cloud Library</h1>
         </div>
-
         <!-- Abas da biblioteca -->
         <nav class="library-nav">
             <button class="nav-btn active">
@@ -82,12 +81,16 @@
                         <option value="za">Nome Z → A</option>
                     </select>
 
-                    <form id="uploadForm" action="#" method="post" enctype="multipart/form-data">
-                        <input type="file" id="fileToUpload" name="file" class="d-none" required />
-                        <button type="button" class="upload-button" onclick="document.getElementById('fileToUpload').click()" title="Adicionar arquivo">
-                            <i class="bi bi-plus-circle"></i>
-                        </button>
+                    <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" name="arquivo" required>
+                        <button type="submit">Enviar</button>
                     </form>
+
+                    @if (session('success'))
+                        <p style="color:green;">{{ session('success') }}</p>
+                    @endif
+
                 </div>
             </div>
 
