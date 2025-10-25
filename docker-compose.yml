@@ -16,7 +16,11 @@ services:
     restart: unless-stopped
 
   php-app:
-    build: ./php
+    build:
+      context: ./php
+      args:
+        UID: 1000
+        GID: 1000
     volumes:
       - ./php/src:/var/www/html
       - ./uploads:/var/www/html/public/uploads
@@ -32,13 +36,7 @@ services:
       - cloud-library
     restart: unless-stopped
 
-    command: >
-      bash -c "
-      echo ' Ajustando permissões...' &&
-      chown -R www-data:www-data /var/www/html &&
-      chmod -R 775 /var/www/html &&
-      echo 'Permissões aplicadas. Iniciando PHP-FPM...' &&
-      php-fpm"
+
 
   postgres:
     image: postgres:13

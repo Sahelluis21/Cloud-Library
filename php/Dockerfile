@@ -1,6 +1,10 @@
 # Usa a imagem base do PHP 8.1 com FPM
 FROM php:8.1-fpm
 
+# Recebe UID/GID do host (você passa no docker-compose)
+ARG UID=1000
+ARG GID=1000
+
 # Temporariamente root para instalar dependências
 USER root
 
@@ -18,20 +22,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin --filename=composer
 
+# Cria usuário de desenvolvimento com UID/GID do host
+RUN groupadd -g $GID devgroup \
+    && useradd -u $UID -g devgroup -m devuser
+
 # Define o diretório de trabalho
 WORKDIR /var/www/html
 
-# Copia código da aplicação e .env
-COPY src/ .
-COPY src/.env .
+# Cria pastas internas necessárias (storage, cache, uploads)
+RUN mkdir -p /var/www/html/storage /var/www/html/storage/logs \
+    /var/www/html/bootstrap/cache \
+    /var/www/html/public/uploads
 
-# Cria pastas internas necessárias apenas para o container (não bind mounts)
-RUN mkdir -p /var/www/html/storage/logs \
-    && mkdir -p /var/www/html/bootstrap/cache
-
-# Ajusta permissões **somente dentro do container**, para pastas não bind-mounted
-RUN chmod -R 775 /var/www/html/storage/logs \
-    && chmod -R 775 /var/www/html/bootstrap/cache
+# Ajusta permissões para o usuário devuser
+RUN chown -R devuser:devgroup /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads
 
 # Configura PHP para uploads grandes
 RUN { \
@@ -42,8 +47,8 @@ RUN { \
     echo 'max_input_time = 3600'; \
 } > /usr/local/etc/php/conf.d/uploads.ini
 
-# Ajusta o usuário padrão para PHP-FPM
-USER www-data
+# Define o usuário padrão do container
+USER devuser
 
 # Comando padrão
 CMD ["php-fpm"]
