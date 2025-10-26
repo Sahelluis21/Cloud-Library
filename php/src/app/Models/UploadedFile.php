@@ -20,4 +20,9 @@ class UploadedFile extends Model
     ];
 
     public $timestamps = false;
+
+    public function owner() 
+    {
+        return $this->belongsTo(User::class, 'uploaded_by', 'id');    
+    }
 }

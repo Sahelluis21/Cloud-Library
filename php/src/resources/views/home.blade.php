@@ -104,6 +104,7 @@
                     <th>Tamanho</th>
                     <th>Tipo</th>
                     <th>Data de Upload</th>
+                    <th>Dono</th>
                 </tr>
             </thead>
             <tbody>
@@ -117,10 +118,11 @@
                         <td>{{ number_format($file->file_size / 1024, 2) }} KB</td>
                         <td>{{ $file->file_type }}</td>
                         <td>{{ $file->upload_date }}</td>
+                        <td>{{ $file->owner ? $file->owner->name : 'Desconhecido' }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" style="text-align:center;">
+                        <td colspan="5" style="text-align:center;">
                             Nenhum arquivo encontrado.
                         </td>
                     </tr>

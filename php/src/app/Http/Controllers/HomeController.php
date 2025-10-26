@@ -13,7 +13,7 @@ class HomeController extends Controller
    
 public function index()
 {
-    $files = UploadedFile::orderBy('upload_date', 'desc')->get();
+    $files = UploadedFile::with('owner')->orderBy('upload_date','desc')->get();
 
     return view('home', compact('files'));
 }
@@ -29,35 +29,44 @@ public function upload(Request $request)
 
     $file = $request->file('arquivo');
 
-    // Criar pasta destino se não existir
-    $destination = public_path('uploads');
-    if (!file_exists($destination)) {
-        mkdir($destination, 0755, true);
+    // Usuário logado
+    $uploadedBy = Auth::check() ? Auth::user()->id : null;
+
+    // Pasta base de uploads
+    $basePath = public_path('uploads');
+
+    // Pasta específica do usuário (ex: uploads/user_5/)
+    $userFolder = $basePath . '/user_' . $uploadedBy;
+
+    // Cria a pasta do usuário se não existir
+    if (!file_exists($userFolder)) {
+        mkdir($userFolder, 0755, true);
     }
 
-    // Gerar nome único para evitar duplicatas
+    // Gera nome único para evitar duplicatas
     $timestamp = time();
     $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
     $extension = $file->getClientOriginalExtension();
     $fileName = $originalName . '_' . $timestamp . '.' . $extension;
 
-    // Mover arquivo para destino
+    // Caminho final do arquivo
+    $destination = $userFolder;
     $file->move($destination, $fileName);
 
-    // Caminho completo do arquivo final
+    // Caminho completo e relativo
     $filePathFull = $destination . '/' . $fileName;
-    $fileSize = filesize($filePathFull); // tamanho seguro
-    $fileType = $file->getClientMimeType();
+    $relativePath = 'uploads/user_' . $uploadedBy . '/' . $fileName;
 
-    // Informações adicionais
+    // Metadados do arquivo
+    $fileSize = filesize($filePathFull);
+    $fileType = $file->getClientMimeType();
     $uploadDate = now();
-    $uploadedBy = Auth::check() ? Auth::user()->id : null;
     $isShared = false;
 
     // Inserir no banco de dados
     DB::table('uploaded_files')->insert([
         'file_name'   => $fileName,
-        'file_path'   => 'uploads/' . $fileName,
+        'file_path'   => $relativePath,
         'file_size'   => $fileSize,
         'file_type'   => $fileType,
         'upload_date' => $uploadDate,
@@ -67,6 +76,7 @@ public function upload(Request $request)
 
     return back()->with('success', 'Arquivo enviado com sucesso!');
 }
+
 
 
 
