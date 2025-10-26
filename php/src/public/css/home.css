@@ -241,18 +241,112 @@ body {
     background: #3395ff;
 }
 
-/* Lista de arquivos */
+/* ============================ */
+/*      ESTILO DA FILE-LIST     */
+/* ============================ */
+
 .file-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1rem;
+    width: 100%;
+    overflow-x: auto;
+    background: #1c1c22;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.file-list p {
+/* Tabela dentro da lista */
+.file-list table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+    color: #e2e2e2;
+    font-size: 0.95rem;
+}
+
+/* Cabeçalho */
+.file-list thead th {
+    text-align: left;
+    background: #23232a;
+    color: #bdbdbd;
+    font-weight: 600;
+    padding: 0.8rem;
+    border-bottom: 1px solid #2f2f37;
+}
+
+/* Linhas */
+.file-list tbody tr {
+    transition: background 0.2s ease;
+}
+
+.file-list tbody tr:nth-child(even) {
+    background: #1f1f25;
+}
+
+.file-list tbody tr:hover {
+    background: #2a2a33;
+}
+
+/* Células */
+.file-list td {
+    padding: 0.8rem;
+    border-bottom: 1px solid #2c2c34;
+}
+
+/* Links de arquivo */
+.file-list a {
+    color: #3395ff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.file-list a:hover {
+    color: #66b3ff;
+    text-decoration: underline;
+}
+
+/* Estado vazio */
+.file-list td[colspan] {
     text-align: center;
     color: #777;
+    font-style: italic;
+    padding: 1.5rem;
 }
 
+/* Responsividade */
+@media (max-width: 600px) {
+    .file-list table,
+    .file-list thead,
+    .file-list tbody,
+    .file-list th,
+    .file-list td,
+    .file-list tr {
+        display: block;
+    }
+
+    .file-list thead {
+        display: none;
+    }
+
+    .file-list tr {
+        margin-bottom: 1rem;
+        background: #1f1f25;
+        border-radius: 10px;
+        padding: 0.8rem;
+    }
+
+    .file-list td {
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+    }
+
+    .file-list td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #999;
+    }
+}
 /* ============================ */
 /*          RESPONSIVIDADE      */
 /* ============================ */

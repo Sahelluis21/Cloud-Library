@@ -107,27 +107,23 @@
                     <th>Dono</th>
                 </tr>
             </thead>
-            <tbody>
-                @forelse($files as $file)
-                    <tr>
-                        <td>
-                            <a href="{{ asset('uploads/' . basename($file->file_path)) }}" target="_blank">
-                                {{ $file->file_name }}
-                            </a>
-                        </td>
-                        <td>{{ number_format($file->file_size / 1024, 2) }} KB</td>
-                        <td>{{ $file->file_type }}</td>
-                        <td>{{ $file->upload_date }}</td>
-                        <td>{{ $file->owner ? $file->owner->name : 'Desconhecido' }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" style="text-align:center;">
-                            Nenhum arquivo encontrado.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
+                <tbody>
+                    @forelse($files as $file)
+                        <tr>
+                            <td data-label="Nome">
+                               <a href="{{ asset($file->file_path) }}" target="_blank">{{ $file->file_name }}</a>
+                            </td>
+                            <td data-label="Tamanho">{{ number_format($file->file_size / 1024, 2) }} KB</td>
+                            <td data-label="Tipo">{{ $file->file_type }}</td>
+                            <td data-label="Data de Upload">{{ $file->upload_date }}</td>
+                            <td data-label="Dono">{{ $file->owner ? $file->owner->name : 'Desconhecido' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5">Nenhum arquivo encontrado.</td>
+                            </tr>
+                        @endforelse
+                </tbody>
         </table>
     </div>
 </section>
