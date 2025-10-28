@@ -33,7 +33,7 @@ public function upload(Request $request)
     $uploadedBy = Auth::check() ? Auth::user()->id : null;
 
     // Pasta base de uploads
-    $basePath = public_path('storage/uploads');
+    $basePath = storage_path('uploads');
 
     // Pasta específica do usuário (ex: uploads/user_5/)
     $userFolder = $basePath . '/user_' . $uploadedBy;
