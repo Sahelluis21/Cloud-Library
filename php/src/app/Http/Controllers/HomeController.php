@@ -33,7 +33,7 @@ public function upload(Request $request)
     $uploadedBy = Auth::check() ? Auth::user()->id : null;
 
     // Pasta base de uploads
-    $basePath = public_path('uploads');
+    $basePath = public_path('storage/uploads');
 
     // Pasta específica do usuário (ex: uploads/user_5/)
     $userFolder = $basePath . '/user_' . $uploadedBy;
@@ -55,7 +55,7 @@ public function upload(Request $request)
 
     // Caminho completo e relativo
     $filePathFull = $destination . '/' . $fileName;
-    $relativePath = 'uploads/user_' . $uploadedBy . '/' . $fileName;
+    $relativePath = 'storage/uploads/user_' . $uploadedBy . '/' . $fileName;
 
     // Metadados do arquivo
     $fileSize = filesize($filePathFull);

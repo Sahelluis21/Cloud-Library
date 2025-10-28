@@ -7,7 +7,7 @@ services:
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./php/src:/var/www/html
-      - ./uploads:/var/www/html/public/uploads
+      - ./uploads:/var/www/html/storage/uploads
       - ./nginx/certs:/etc/nginx/certs:ro
     depends_on:
       - php-app
@@ -23,7 +23,7 @@ services:
         GID: 1000
     volumes:
       - ./php/src:/var/www/html
-      - ./uploads:/var/www/html/public/uploads
+      - ./uploads:/var/www/html/storage/uploads
     environment:
       - DB_HOST=${DB_HOST}
       - DB_DATABASE=${DB_DATABASE}
