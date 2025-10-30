@@ -97,7 +97,7 @@
                     </div>
                 </div>
 
-                <!-- ============================ DIVS DAS ABAS ============================ -->
+                <!-- ============================ DIV - BIBLIOTECA COMPARTILHADA ============================ -->
                 <div id="shared" class="library-content">
                     <div class="file-table-container">
                         <table class="file-table">
@@ -129,8 +129,23 @@
                                         </td>
                                         <td data-label="Ações" class="file-actions">
                                             <a href="{{ asset($file->file_path) }}" download class="action-btn download" title="Baixar">⬇</a>
-                                            <button class="action-btn share" title="Compartilhar">⤴</button>
-                                            <form action="{{ route('files.delete', $file->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir este arquivo?')">
+
+                                            <form action="{{ route('files.share', $file->id) }}"
+                                                  method="POST"
+                                                  style="display:inline;"
+                                                  onsubmit="return confirmShare('{{ $file->is_shared ? 'descompartilhar' : 'compartilhar' }}')">
+                                                @csrf
+                                                <button type="submit"
+                                                        class="action-btn share"
+                                                        title="{{ $file->is_shared ? 'Descompartilhar' : 'Compartilhar' }}">
+                                                    ⤴
+                                                </button>
+                                            </form>
+
+                                            <form action="{{ route('files.delete', $file->id) }}"
+                                                  method="POST"
+                                                  style="display: inline;"
+                                                  onsubmit="return confirm('Tem certeza que deseja excluir este arquivo?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="action-btn delete" title="Excluir">🗑</button>
@@ -149,6 +164,7 @@
                     </div>
                 </div>
 
+                <!-- ============================ DIV - BIBLIOTECA PESSOAL ============================ -->
                 <div id="personal" class="library-content" style="display:none;">
                     <div class="file-table-container">
                         <table class="file-table">
@@ -180,8 +196,23 @@
                                         </td>
                                         <td data-label="Ações" class="file-actions">
                                             <a href="{{ asset($file->file_path) }}" download class="action-btn download" title="Baixar">⬇</a>
-                                            <button class="action-btn share" title="Compartilhar">⤴</button>
-                                            <form action="{{ route('files.delete', $file->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir este arquivo?')">
+
+                                            <form action="{{ route('files.share', $file->id) }}"
+                                                  method="POST"
+                                                  style="display:inline;"
+                                                  onsubmit="return confirmShare('{{ $file->is_shared ? 'descompartilhar' : 'compartilhar' }}')">
+                                                @csrf
+                                                <button type="submit"
+                                                        class="action-btn share"
+                                                        title="{{ $file->is_shared ? 'Descompartilhar' : 'Compartilhar' }}">
+                                                    ⤴
+                                                </button>
+                                            </form>
+
+                                            <form action="{{ route('files.delete', $file->id) }}"
+                                                  method="POST"
+                                                  style="display: inline;"
+                                                  onsubmit="return confirm('Tem certeza que deseja excluir este arquivo?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="action-btn delete" title="Excluir">🗑</button>
@@ -201,23 +232,27 @@
                 </div>
 
             </section>
-
         </main>
 
     </div> <!-- fim layout-container -->
 
-    <!-- ============================ SCRIPT PARA TROCA DE ABAS ============================ -->
+    <!-- ============================ SCRIPT PARA TROCA DE ABAS E CONFIRMAÇÃO ============================ -->
     <script>
         function showLibrary(tab) {
             document.querySelectorAll('.library-content').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tab).style.display = 'block';
-            if(tab === 'personal') {
+            if (tab === 'personal') {
                 document.getElementById('btn-personal').classList.add('active');
             } else {
                 document.getElementById('btn-shared').classList.add('active');
             }
         }
+
+        function confirmShare(action) {
+            return confirm(`Tem certeza que deseja ${action} este arquivo?`);
+        }
+
         showLibrary('shared');
     </script>
 
