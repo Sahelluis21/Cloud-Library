@@ -1,0 +1,300 @@
+/* ============================ */
+/* 🌙 CLOUD LIBRARY - HOME PAGE */
+/* ============================ */
+
+/* --------- RESET --------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", "Poppins", sans-serif;
+}
+
+body {
+  background: #101014;
+  color: #f3f3f3;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* --------- CONTAINER --------- */
+.layout-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+/* ============================ */
+/*         SIDEBAR              */
+/* ============================ */
+.sidebar {
+  width: 300px;
+  background: #18181d;
+  border-right: 1px solid #2c2c34;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem 1.5rem;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+}
+
+.sidebar-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sidebar-header .logo {
+  width: 70px;
+  margin-bottom: 0.8rem;
+}
+
+.sidebar-header .site-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.library-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-btn {
+  background: #23232a;
+  color: #ddd;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: 0.2s;
+}
+
+.nav-btn:hover {
+  background: #2d2d36;
+}
+
+.nav-btn.active {
+  background: #005cfb;
+  color: #fff;
+}
+
+/* ============================ */
+/*        ÁREA PRINCIPAL        */
+/* ============================ */
+.main-content {
+  margin-left: 300px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.username {
+  font-weight: 500;
+  color: #ddd;
+}
+
+.logout-btn {
+  background: #2d2d36;
+  color: #f3f3f3;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.logout-btn:hover {
+  background: #3d3d48;
+}
+
+/* ============================ */
+/*        DOCUMENTOS / ARQUIVOS */
+/* ============================ */
+.documents-container {
+  background: #18181d;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+}
+
+.documents-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.form-select,
+.upload-button {
+  background: #23232a;
+  border-radius: 8px;
+  border: 1px solid #333;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.7rem;
+}
+
+.upload-button {
+  background: #007bff;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.upload-button:hover {
+  background: #3395ff;
+}
+
+/* ============================ */
+/*   LISTAGEM DE ARQUIVOS      */
+/* ============================ */
+.file-table-container {
+  background: #18181d;
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
+  overflow-x: auto;
+}
+
+.file-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.75rem;
+}
+
+.file-table thead th {
+  color: #aaa;
+  font-weight: 500;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  border-bottom: 1px solid #2c2c34;
+}
+
+.file-table tbody tr {
+  background: #202028;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.file-table tbody tr:hover {
+  background: #2a2a34;
+  transform: translateY(-2px);
+}
+
+.file-table td {
+  padding: 0.9rem 0.8rem;
+  font-size: 0.9rem;
+  color: #f3f3f3;
+  vertical-align: middle;
+}
+
+.file-table td:first-child {
+  font-weight: 500;
+  color: #fff;
+}
+
+/* Remove link visual */
+.file-table td a {
+  color: inherit;
+  text-decoration: none;
+  pointer-events: none;
+}
+
+/* Arredondamento nas extremidades */
+.file-table tbody tr td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.file-table tbody tr td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Botões de ação */
+.action-btn {
+  background: #25252d;
+  border: none;
+  color: #ddd;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-right: 0.3rem;
+  transition: 0.2s;
+}
+
+.action-btn:hover {
+  background: #33333d;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.action-btn.download::before {
+  content: "⬇";
+}
+.action-btn.share::before {
+  content: "⤴";
+}
+.action-btn.delete::before {
+  content: "🗑";
+}
+
+.file-table td[data-label="Ações"] {
+  text-align: center;
+}
+
+/* ============================ */
+/*        RESPONSIVIDADE        */
+/* ============================ */
+@media (max-width: 900px) {
+  .sidebar {
+    width: 230px;
+    padding: 1.5rem;
+  }
+  .main-content {
+    margin-left: 230px;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .layout-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    position: relative;
+    width: 100%;
+    border-bottom: 1px solid #2c2c34;
+  }
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 800px) {
+  .file-table th,
+  .file-table td {
+    font-size: 0.8rem;
+    padding: 0.6rem;
+  }
+
+  .action-btn {
+    padding: 0.3rem 0.45rem;
+    font-size: 0.8rem;
+  }
+}
