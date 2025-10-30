@@ -77,6 +77,13 @@ public function upload(Request $request)
     return back()->with('success', 'Arquivo enviado com sucesso!');
 }
 
+public function delete($id)
+    {
+        $file = UploadedFile::findOrFail($id);
+        $file->deleteFile();
+
+        return redirect()->back()->with('success', 'Arquivo excluído com sucesso!');
+    }
 
 
 

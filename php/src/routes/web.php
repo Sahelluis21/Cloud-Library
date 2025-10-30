@@ -13,7 +13,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', function() {
     return view('dashboard');
 })->middleware('auth');
-
+Route::delete('/files/{id}', [HomeController::class, 'delete'])->name('files.delete');
 Route::get('/', function () {
     return view('welcome');
 });

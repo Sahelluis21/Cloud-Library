@@ -25,4 +25,18 @@ class UploadedFile extends Model
     {
         return $this->belongsTo(User::class, 'uploaded_by', 'id');    
     }
+
+    public function deleteFile()
+    {
+        $fullPath = public_path($this->file_path);
+
+        // Exclui o arquivo físico se existir
+        if (file_exists($fullPath)) {
+            unlink($fullPath);
+        }
+
+        // Exclui o registro no banco
+        $this->delete();
+    }
 }
+
