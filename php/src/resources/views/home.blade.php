@@ -96,36 +96,51 @@
     </div>
 
     <!-- Lista de arquivos -->
-    <div class="file-list">
-        <table border="1" cellpadding="8" style="width: 100%; border-collapse: collapse;">
-            <thead>
+<div class="file-table-container">
+    <table class="file-table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Tamanho</th>
+                <th>Tipo</th>
+                <th>Data de Upload</th>
+                <th>Dono</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($files as $file)
                 <tr>
-                    <th>Nome</th>
-                    <th>Tamanho</th>
-                    <th>Tipo</th>
-                    <th>Data de Upload</th>
-                    <th>Dono</th>
+                    <td data-label="Nome">
+                        <a href="{{ asset($file->file_path) }}" target="_blank">
+                            {{ $file->file_name }}
+                        </a>
+                    </td>
+                    <td data-label="Tamanho">
+                        {{ number_format($file->file_size / 1024, 2) }} KB
+                    </td>
+                    <td data-label="Tipo">{{ $file->file_type }}</td>
+                    <td data-label="Data de Upload">{{ $file->upload_date }}</td>
+                    <td data-label="Dono">
+                        {{ $file->owner ? $file->owner->name : 'Desconhecido' }}
+                    </td>
+                    <td data-label="Ações">
+                        <button class="action-btn download" title="Baixar">⬇</button>
+                        <button class="action-btn share" title="Compartilhar">⤴</button>
+                        <button class="action-btn delete" title="Excluir">🗑</button>
+                    </td>
                 </tr>
-            </thead>
-                <tbody>
-                    @forelse($files as $file)
-                        <tr>
-                            <td data-label="Nome">
-                               <a href="{{ asset($file->file_path) }}" target="_blank">{{ $file->file_name }}</a>
-                            </td>
-                            <td data-label="Tamanho">{{ number_format($file->file_size / 1024, 2) }} KB</td>
-                            <td data-label="Tipo">{{ $file->file_type }}</td>
-                            <td data-label="Data de Upload">{{ $file->upload_date }}</td>
-                            <td data-label="Dono">{{ $file->owner ? $file->owner->name : 'Desconhecido' }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5">Nenhum arquivo encontrado.</td>
-                            </tr>
-                        @endforelse
-                </tbody>
-        </table>
-    </div>
+            @empty
+                <tr>
+                    <td colspan="6" style="text-align: center; color: #999;">
+                        Nenhum arquivo encontrado.
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
 </section>
 
 
