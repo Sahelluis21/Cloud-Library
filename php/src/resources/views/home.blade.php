@@ -124,11 +124,29 @@
                     <td data-label="Dono">
                         {{ $file->owner ? $file->owner->name : 'Desconhecido' }}
                     </td>
-                    <td data-label="Ações">
-                        <button class="action-btn download" title="Baixar">⬇</button>
+                   <td data-label="Ações" class="file-actions">
+                        {{-- Botão de download --}}
+                        <a href="{{ asset($file->file_path) }}" 
+                        download 
+                        class="action-btn download" 
+                        title="Baixar">⬇</a>
+
+                        {{-- Botão de compartilhamento (exemplo, caso já exista lógica) --}}
                         <button class="action-btn share" title="Compartilhar">⤴</button>
-                        <button class="action-btn delete" title="Excluir">🗑</button>
+
+                        {{-- Formulário para exclusão --}}
+                        <form action="{{ route('files.delete', $file->id) }}" 
+                            method="POST" 
+                            style="display: inline;" 
+                            onsubmit="return confirm('Tem certeza que deseja excluir este arquivo?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" 
+                                    class="action-btn delete" 
+                                    title="Excluir">🗑</button>
+                        </form>
                     </td>
+
                 </tr>
             @empty
                 <tr>
