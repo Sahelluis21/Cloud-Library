@@ -195,7 +195,12 @@
                                             {{ $file->owner ? $file->owner->apelido ?? $file->owner->username : 'Desconhecido' }}
                                         </td>
                                         <td data-label="Ações" class="file-actions">
-                                            <a href="{{ asset($file->file_path) }}" download class="action-btn download" title="Baixar">⬇</a>
+                                            <a href="{{ route('files.download', $file->id) }}" 
+                                                class="action-btn download" 
+                                                title="Baixar" 
+                                                onclick="return confirm('Deseja baixar este arquivo?')">
+                                            </a>
+
 
                                             <form action="{{ route('files.share', $file->id) }}"
                                                   method="POST"

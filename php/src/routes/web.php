@@ -13,6 +13,7 @@ Route::delete('/files/{id}', [HomeController::class, 'delete'])->name('files.del
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/files/share/{id}', [App\Http\Controllers\HomeController::class, 'share'])->name('files.share');
+Route::get('/files/download/{id}', [HomeController::class, 'download'])->name('files.download');
 
 
 Route::get('/dashboard', function() {

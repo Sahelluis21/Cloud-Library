@@ -93,21 +93,26 @@ class HomeController extends Controller
      * Faz download de um arquivo (somente se for dono ou compartilhado)
      */
     public function download($id)
-    {
-        $file = UploadedFile::findOrFail($id);
+{
+    $file = UploadedFile::findOrFail($id);
 
-        if ($file->uploaded_by != auth()->id() && !$file->is_shared) {
-            abort(403, 'Acesso negado');
-        }
-
-        $path = storage_path('uploads/user_' . $file->uploaded_by . '/' . $file->file_name);
-
-        if (!file_exists($path)) {
-            abort(404, 'Arquivo não encontrado');
-        }
-
-        return response()->download($path, $file->file_name);
+    // Verifica se o usuário tem permissão para baixar
+    if (
+        !$file->is_shared && 
+        Auth::id() !== $file->uploaded_by
+    ) {
+        abort(403, 'Você não tem permissão para baixar este arquivo.');
     }
+
+    $filePath = storage_path('uploads/user_' . $file->uploaded_by . '/' . $file->file_name);
+
+    if (!file_exists($filePath)) {
+        abort(404, 'Arquivo não encontrado.');
+    }
+
+    return response()->download($filePath, $file->file_name);
+}
+
 
     /**
      * Alterna o estado de compartilhamento do arquivo (somente dono)
@@ -127,18 +132,19 @@ class HomeController extends Controller
     }
 
     public function share($id)
-{
-    // Pega o arquivo, apenas se ele pertence ao usuário logado
-    $file = UploadedFile::where('id', $id)
-                        ->where('uploaded_by', auth()->user()->id)
-                        ->firstOrFail();
+    {
+        // Pega o arquivo, apenas se ele pertence ao usuário logado
+        $file = UploadedFile::where('id', $id)
+                            ->where('uploaded_by', auth()->user()->id)
+                            ->firstOrFail();
 
-    // Alterna o valor de is_shared
-    $file->is_shared = !$file->is_shared;
-    $file->save();
+        // Alterna o valor de is_shared
+        $file->is_shared = !$file->is_shared;
+        $file->save();
 
-    return back()->with('success', 'Arquivo atualizado com sucesso!');
-}
+        return back()->with('success', 'Arquivo atualizado com sucesso!');
+    }
 
+    
 }
 
