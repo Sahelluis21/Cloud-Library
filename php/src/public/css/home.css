@@ -230,13 +230,14 @@ body {
   background: #25252d;
   border: none;
   color: #ddd;
-  padding: 0.45rem 0.55rem;
+  padding: 0.35rem 0.5rem;
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   cursor: pointer;
   margin-right: 0.3rem;
   transition: 0.2s;
 }
+
 
 .action-btn:hover {
   background: #33333d;
@@ -244,15 +245,6 @@ body {
   transform: scale(1.05);
 }
 
-.action-btn.download::before {
-  content: "⬇";
-}
-.action-btn.share::before {
-  content: "⤴";
-}
-.action-btn.delete::before {
-  content: "🗑";
-}
 
 .file-table td[data-label="Ações"] {
   text-align: center;
@@ -297,4 +289,55 @@ body {
     padding: 0.3rem 0.45rem;
     font-size: 0.8rem;
   }
+}
+/* força layout em linha e espaço entre ações */
+.file-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* unifica estilo de botões e links de ação */
+.file-actions .action-btn,
+.file-actions a.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: #25252d;
+  color: #ddd;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  margin: 0;
+  transition: 0.12s;
+  position: relative;   /* evita que pseudo-elements de outros elementos se sobreponham */
+  z-index: 2;           /* garante que o elemento esteja acima de possíveis camadas */
+  pointer-events: auto; /* garante que seja clicável */
+}
+
+/* hover visual */
+.file-actions .action-btn:hover,
+.file-actions a.action-btn:hover {
+  transform: scale(1.05);
+  background: #33333d;
+  color: #fff;
+}
+
+/* garante que forms usados como wrapper não quebrem o fluxo */
+.file-actions form {
+  display: inline-flex;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+/* Remove pseudo icons se você já tem o ícone no HTML */
+.action-btn.download::before,
+.action-btn.share::before,
+.action-btn.delete::before {
+  content: none !important;
 }
