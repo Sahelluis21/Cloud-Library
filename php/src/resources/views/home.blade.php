@@ -122,7 +122,7 @@
                     <td data-label="Tipo">{{ $file->file_type }}</td>
                     <td data-label="Data de Upload">{{ $file->upload_date }}</td>
                     <td data-label="Dono">
-                        {{ $file->owner ? $file->owner->name : 'Desconhecido' }}
+                        {{ $file->owner ? $file->owner->apelido ?? $file->owner->username : 'Desconhecido' }}
                     </td>
                    <td data-label="Ações" class="file-actions">
                         {{-- Botão de download --}}

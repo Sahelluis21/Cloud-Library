@@ -11,9 +11,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $primaryKey = 'username'; // Campo de login
-    public $incrementing = false;       // Se username não for auto-increment
-    protected $keyType = 'string';      // Tipo da chave primária
+    protected $primaryKey = 'id'; // Campo de login
+    public $incrementing = true;       // Se username não for auto-increment
+    protected $keyType = 'int';      // Tipo da chave primária
 
     protected $fillable = [
         'username',
