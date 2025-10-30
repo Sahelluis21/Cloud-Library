@@ -6,85 +6,123 @@ use App\Models\UploadedFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Controller;
 
 class HomeController extends Controller
 {
-   
-public function index()
-{
-    $files = UploadedFile::with('owner')->orderBy('upload_date','desc')->get();
+    /**
+     * Lista os arquivos do usuário logado e arquivos compartilhados
+     */
+    public function index()
+    {
+        $userId = auth()->id();
 
-    return view('home', compact('files'));
-}
+        // Busca apenas arquivos do usuário ou compartilhados
+        $files = UploadedFile::with('owner')
+            ->where(function($query) use ($userId) {
+                $query->where('uploaded_by', $userId)
+                      ->orWhere('is_shared', true);
+            })
+            ->orderBy('upload_date', 'desc')
+            ->get();
 
-
-
-public function upload(Request $request)
-{
-    // Validação do arquivo
-    $request->validate([
-        'arquivo' => 'required|file|max:3145728', // até 3MB
-    ]);
-
-    $file = $request->file('arquivo');
-
-    // Usuário logado
-    $uploadedBy = Auth::check() ? Auth::user()->id : null;
-
-    // Pasta base de uploads
-    $basePath = storage_path('uploads');
-
-    // Pasta específica do usuário (ex: uploads/user_5/)
-    $userFolder = $basePath . '/user_' . $uploadedBy;
-
-    // Cria a pasta do usuário se não existir
-    if (!file_exists($userFolder)) {
-        mkdir($userFolder, 0755, true);
+        return view('home', compact('files'));
     }
 
-    // Gera nome único para evitar duplicatas
-    $timestamp = time();
-    $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-    $extension = $file->getClientOriginalExtension();
-    $fileName = $originalName . '_' . $timestamp . '.' . $extension;
+    /**
+     * Faz upload de um arquivo
+     */
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'arquivo' => 'required|file|max:3145728', // até 3MB
+        ]);
 
-    // Caminho final do arquivo
-    $destination = $userFolder;
-    $file->move($destination, $fileName);
+        $file = $request->file('arquivo');
+        $uploadedBy = auth()->id(); // ID do usuário logado
 
-    // Caminho completo e relativo
-    $filePathFull = $destination . '/' . $fileName;
-    $relativePath = 'storage/uploads/user_' . $uploadedBy . '/' . $fileName;
+        // Pasta base do usuário
+        $userFolder = storage_path('uploads/user_' . $uploadedBy);
+        if (!file_exists($userFolder)) {
+            mkdir($userFolder, 0755, true);
+        }
 
-    // Metadados do arquivo
-    $fileSize = filesize($filePathFull);
-    $fileType = $file->getClientMimeType();
-    $uploadDate = now();
-    $isShared = false;
+        // Nome único para evitar conflitos
+        $timestamp = time();
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        $fileName = $originalName . '_' . $timestamp . '.' . $extension;
 
-    // Inserir no banco de dados
-    DB::table('uploaded_files')->insert([
-        'file_name'   => $fileName,
-        'file_path'   => $relativePath,
-        'file_size'   => $fileSize,
-        'file_type'   => $fileType,
-        'upload_date' => $uploadDate,
-        'uploaded_by' => $uploadedBy,
-        'is_shared'   => $isShared,
-    ]);
+        // Caminho final
+        $file->move($userFolder, $fileName);
+        $relativePath = 'storage/uploads/user_' . $uploadedBy . '/' . $fileName;
 
-    return back()->with('success', 'Arquivo enviado com sucesso!');
-}
+        // Inserir no banco
+        UploadedFile::create([
+            'file_name'   => $fileName,
+            'file_path'   => $relativePath,
+            'file_size'   => filesize($userFolder . '/' . $fileName),
+            'file_type'   => $file->getClientMimeType(),
+            'upload_date' => now(),
+            'uploaded_by' => $uploadedBy,
+            'is_shared'   => false,
+        ]);
 
-public function delete($id)
+        return back()->with('success', 'Arquivo enviado com sucesso!');
+    }
+
+    /**
+     * Deleta um arquivo (somente se for dono)
+     */
+    public function delete($id)
     {
         $file = UploadedFile::findOrFail($id);
+
+        // Verifica se o usuário logado é o dono
+        if ($file->uploaded_by != auth()->id()) {
+            abort(403, 'Acesso negado');
+        }
+
         $file->deleteFile();
 
-        return redirect()->back()->with('success', 'Arquivo excluído com sucesso!');
+        return back()->with('success', 'Arquivo excluído com sucesso!');
     }
 
+    /**
+     * Faz download de um arquivo (somente se for dono ou compartilhado)
+     */
+    public function download($id)
+    {
+        $file = UploadedFile::findOrFail($id);
 
+        if ($file->uploaded_by != auth()->id() && !$file->is_shared) {
+            abort(403, 'Acesso negado');
+        }
 
+        $path = storage_path('uploads/user_' . $file->uploaded_by . '/' . $file->file_name);
+
+        if (!file_exists($path)) {
+            abort(404, 'Arquivo não encontrado');
+        }
+
+        return response()->download($path, $file->file_name);
+    }
+
+    /**
+     * Alterna o estado de compartilhamento do arquivo (somente dono)
+     */
+    public function toggleShare($id)
+    {
+        $file = UploadedFile::findOrFail($id);
+
+        if ($file->uploaded_by != auth()->id()) {
+            abort(403, 'Acesso negado');
+        }
+
+        $file->is_shared = !$file->is_shared;
+        $file->save();
+
+        return back()->with('success', 'Status de compartilhamento atualizado!');
+    }
 }
