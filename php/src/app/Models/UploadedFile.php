@@ -23,7 +23,7 @@ class UploadedFile extends Model
 
     public function owner() 
     {
-        return $this->belongsTo(User::class, 'uploaded_by', 'id');    
+        return $this->belongsTo(User::class, 'uploaded_by');   
     }
 
     public function deleteFile()
