@@ -12,6 +12,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::delete('/files/{id}', [HomeController::class, 'delete'])->name('files.delete');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/files/share/{id}', [App\Http\Controllers\HomeController::class, 'share'])->name('files.share');
 
 
 Route::get('/dashboard', function() {

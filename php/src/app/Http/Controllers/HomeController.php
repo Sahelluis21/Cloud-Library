@@ -125,4 +125,20 @@ class HomeController extends Controller
 
         return back()->with('success', 'Status de compartilhamento atualizado!');
     }
+
+    public function share($id)
+{
+    // Pega o arquivo, apenas se ele pertence ao usuário logado
+    $file = UploadedFile::where('id', $id)
+                        ->where('uploaded_by', auth()->user()->id)
+                        ->firstOrFail();
+
+    // Alterna o valor de is_shared
+    $file->is_shared = !$file->is_shared;
+    $file->save();
+
+    return back()->with('success', 'Arquivo atualizado com sucesso!');
 }
+
+}
+
