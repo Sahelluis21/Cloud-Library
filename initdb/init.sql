@@ -19,6 +19,6 @@ CREATE TABLE IF NOT EXISTS uploaded_files (
 
 -- Inserir usuário admin (senha: password)
 -- O hash abaixo é do bcrypt
-INSERT INTO users (username, password_hash)
+INSERT INTO users (username,password_hash, apelido, email, created_at, updated_at)
 VALUES ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi')
 ON CONFLICT (username) DO NOTHING;

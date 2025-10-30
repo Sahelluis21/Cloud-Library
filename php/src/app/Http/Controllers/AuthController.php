@@ -38,6 +38,39 @@ class AuthController extends Controller
         ]);
     }
 
+
+    public function showRegisterForm()
+    {
+        return view('auth.register');
+    }
+
+    // Processa o cadastro
+    public function register(Request $request)
+{
+    // Validação
+    $validated = $request->validate([
+        'username' => 'required|string|max:100',
+        'apelido'  => 'nullable|string|max:100',
+        'email'    => 'required|email|unique:users',
+        'password' => 'required|min:6|confirmed'
+    ]);
+
+    // Cria o novo usuário
+    $user = User::create([
+        'username'      => $validated['username'],
+        'apelido'       => $validated['apelido'] ?? null, // se não informar, será null
+        'email'         => $validated['email'],
+        'password_hash' => Hash::make($validated['password']),
+    ]);
+
+    // Loga o usuário automaticamente
+    auth()->login($user);
+
+    return redirect()->route('home')->with('success', 'Cadastro realizado com sucesso!');
+}
+
+
+
     // Logout
     public function logout(Request $request)
     {
