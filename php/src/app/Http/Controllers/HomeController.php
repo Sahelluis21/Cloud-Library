@@ -89,29 +89,57 @@ class HomeController extends Controller
         return back()->with('success', 'Arquivo excluído com sucesso!');
     }
 
-    /**
-     * Faz download de um arquivo (somente se for dono ou compartilhado)
-     */
-    public function download($id)
-{
-    $file = UploadedFile::findOrFail($id);
 
-    // Verifica se o usuário tem permissão para baixar
-    if (
-        !$file->is_shared && 
-        Auth::id() !== $file->uploaded_by
-    ) {
-        abort(403, 'Você não tem permissão para baixar este arquivo.');
+    public function download(Request $request, $id)
+    {
+        $file = UploadedFile::findOrFail($id);
+
+        // Validação de permissão
+        if (!$file->is_shared && Auth::id() !== $file->uploaded_by) {
+            abort(403, 'Você não tem permissão para acessar este arquivo.');
+        }
+
+        // Caminho físico
+        $filePath = storage_path('uploads/user_' . $file->uploaded_by . '/' . $file->file_name);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'Arquivo não encontrado.');
+        }
+
+        // Se veio ?preview=true, mostra inline no navegador
+        if ($request->has('preview')) {
+            return response()->file($filePath, [
+                'Content-Type' => $file->file_type,
+                'Content-Disposition' => 'inline; filename="' . $file->file_name . '"'
+            ]);
+        }
+
+        // Caso contrário, força download
+        return response()->download($filePath, $file->file_name);
     }
 
-    $filePath = storage_path('uploads/user_' . $file->uploaded_by . '/' . $file->file_name);
 
-    if (!file_exists($filePath)) {
-        abort(404, 'Arquivo não encontrado.');
+    public function preview($id)
+    {
+            $file = UploadedFile::findOrFail($id);
+
+        // Permissão: apenas dono ou compartilhado
+        if (!$file->is_shared && Auth::id() !== $file->uploaded_by) {
+            abort(403, 'Você não tem permissão para visualizar este arquivo.');
+        }
+
+        // Caminho real do arquivo
+        $filePath = storage_path('uploads/user_' . $file->uploaded_by . '/' . $file->file_name);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'Arquivo não encontrado.');
+        }
+
+        // URL segura para o iframe (mesma função do download, mas inline)
+        $fileUrl = route('files.download', ['id' => $file->id, 'preview' => true]);
+
+        return view('preview', compact('file', 'fileUrl'));
     }
-
-    return response()->download($filePath, $file->file_name);
-}
 
 
     /**
