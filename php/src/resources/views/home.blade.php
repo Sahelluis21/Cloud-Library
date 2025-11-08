@@ -13,12 +13,10 @@
 
         <!-- ============================ SIDEBAR (ESQUERDA) ============================ -->
         <aside class="sidebar">
-            <!-- Logo -->
             <div class="sidebar-header">
                 <h1 class="site-title">Cloud Library</h1>
             </div>
 
-            <!-- Abas da biblioteca -->
             <nav class="library-nav">
                 <button class="nav-btn active" id="btn-shared" onclick="showLibrary('shared')">
                     <i class="bi bi-folder2-open me-2"></i> Biblioteca Compartilhada
@@ -28,16 +26,16 @@
                 </button>
             </nav>
 
-            <!-- Espaço de armazenamento -->
             <div class="storage-section">
                 <h3><i class="bi bi-hdd me-2"></i> Espaço de Armazenamento</h3>
                 <div class="storage-progress">
                     <div class="storage-progress-filled" style="width: 45%;"></div>
                 </div>
-                <p class="storage-details"><i class="bi bi-pie-chart me-1"></i> 450MB de 1GB usados</p>
+                <p class="storage-details">
+                    <i class="bi bi-pie-chart me-1"></i> 450MB de 1GB usados
+                </p>
             </div>
 
-            <!-- Informações fixas -->
             <div class="info-section">
                 <h3><i class="bi bi-info-circle me-2"></i> Informações Importantes</h3>
                 <ul>
@@ -51,7 +49,6 @@
         <!-- ============================ ÁREA PRINCIPAL (DIREITA) ============================ -->
         <main class="main-content">
 
-            <!-- Cabeçalho do usuário -->
             <header class="main-header">
                 <div class="user-info">
                     <svg class="user-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
@@ -67,14 +64,11 @@
                 </form>
             </header>
 
-            <!-- Conteúdo principal -->
             <section class="documents-container">
-
                 <div class="documents-header">
                     <h2>Arquivos Disponíveis ☁️</h2>
 
                     <div class="documents-controls">
-                        <!-- Filtro de ordenação -->
                         <select id="sortOrder" class="form-select">
                             <option value="newest">Últimos adicionados</option>
                             <option value="oldest">Primeiros adicionados</option>
@@ -84,7 +78,6 @@
                             <option value="za">Nome Z → A</option>
                         </select>
 
-                        <!-- Formulário de upload -->
                         <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="file" name="arquivo" required>
@@ -115,7 +108,8 @@
                                 @forelse($files->where('is_shared', true) as $file)
                                     <tr>
                                         <td data-label="Nome">
-                                            <a href="{{ asset($file->file_path) }}" target="_blank">
+                                            <!-- Visualizar arquivo (abre em nova aba) -->
+                                            <a href="{{ route('download', ['id' => $file->id, 'preview' => true]) }}" target="_blank">
                                                 {{ $file->file_name }}
                                             </a>
                                         </td>
@@ -128,7 +122,7 @@
                                             {{ $file->owner ? $file->owner->apelido ?? $file->owner->username : 'Desconhecido' }}
                                         </td>
                                         <td data-label="Ações" class="file-actions">
-                                            <a href="{{ asset($file->file_path) }}" download class="action-btn download" title="Baixar">⬇</a>
+                                            <a href="{{ route('download', ['id' => $file->id]) }}" class="action-btn download" title="Baixar">⬇</a>
 
                                             <form action="{{ route('files.share', $file->id) }}"
                                                   method="POST"
@@ -144,7 +138,7 @@
 
                                             <form action="{{ route('files.delete', $file->id) }}"
                                                   method="POST"
-                                                  style="display: inline;"
+                                                  style="display:inline;"
                                                   onsubmit="return confirm('Tem certeza que deseja excluir este arquivo?')">
                                                 @csrf
                                                 @method('DELETE')
@@ -182,7 +176,7 @@
                                 @forelse($files->where('uploaded_by', auth()->user()->id) as $file)
                                     <tr>
                                         <td data-label="Nome">
-                                            <a href="{{ asset($file->file_path) }}" target="_blank">
+                                            <a href="{{ route('download', ['id' => $file->id, 'preview' => true]) }}" target="_blank">
                                                 {{ $file->file_name }}
                                             </a>
                                         </td>
@@ -195,12 +189,12 @@
                                             {{ $file->owner ? $file->owner->apelido ?? $file->owner->username : 'Desconhecido' }}
                                         </td>
                                         <td data-label="Ações" class="file-actions">
-                                            <a href="{{ route('files.download', $file->id) }}" 
-                                                class="action-btn download" 
-                                                title="Baixar" 
-                                                onclick="return confirm('Deseja baixar este arquivo?')">
+                                            <a href="{{ route('download', ['id' => $file->id]) }}" 
+                                               class="action-btn download" 
+                                               title="Baixar"
+                                               onclick="return confirm('Deseja baixar este arquivo?')">
+                                                ⬇
                                             </a>
-
 
                                             <form action="{{ route('files.share', $file->id) }}"
                                                   method="POST"
@@ -216,7 +210,7 @@
 
                                             <form action="{{ route('files.delete', $file->id) }}"
                                                   method="POST"
-                                                  style="display: inline;"
+                                                  style="display:inline;"
                                                   onsubmit="return confirm('Tem certeza que deseja excluir este arquivo?')">
                                                 @csrf
                                                 @method('DELETE')
