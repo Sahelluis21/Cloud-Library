@@ -48,6 +48,11 @@ body {
 .sidebar-header .site-title {
   font-size: 1.5rem;
   font-weight: 600;
+  text-align: center;         /* Centraliza o texto horizontalmente */
+  width: 100%;                /* Garante que o texto use toda a largura do header */
+  display: block;             /* Garante comportamento previsível do alinhamento */
+  margin: 0 auto;             /* Centraliza dentro do container, caso haja margens */
+  padding: 0.5rem 0;  
 }
 
 .library-nav {
