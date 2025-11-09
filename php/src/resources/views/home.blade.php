@@ -14,7 +14,11 @@
         <!-- ============================ SIDEBAR (ESQUERDA) ============================ -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h1 class="site-title">Cloud Library</h1>
+                <svg class="user-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        <path fill-rule="evenodd" d="M14 14s-1-4-6-4-6 4-6 4 1 1 6 1 6-1 6-1z"/>
+                </svg>
+                <span class="username">Bem-vindo, {{ auth()->user()->username }}!</span>
             </div>
 
             <nav class="library-nav">
@@ -51,11 +55,7 @@
 
             <header class="main-header">
                 <div class="user-info">
-                    <svg class="user-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                        <path fill-rule="evenodd" d="M14 14s-1-4-6-4-6 4-6 4 1 1 6 1 6-1 6-1z"/>
-                    </svg>
-                    <span class="username">Bem-vindo, {{ auth()->user()->username }}!</span>
+                    <h1 class="site-title">Cloud Library</h1>
                 </div>
 
                 <form method="POST" action="{{ route('logout') }}">
