@@ -21,6 +21,19 @@ CREATE TABLE IF NOT EXISTS uploaded_files (
     is_shared BOOLEAN DEFAULT FALSE
 );
 
+-- Criação da tabela de pastas
+CREATE TABLE IF NOT EXISTS folders (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    parent_id INTEGER REFERENCES folders(id) ON DELETE CASCADE,
+    owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Adiciona o vínculo de pasta nos arquivos
+ALTER TABLE uploaded_files
+ADD COLUMN IF NOT EXISTS folder_id INTEGER REFERENCES folders(id) ON DELETE SET NULL;
 
 -- Inserir usuário admin (senha: password)
 -- Hash bcrypt padrão do 'password'
