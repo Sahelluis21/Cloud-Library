@@ -14,8 +14,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     unzip \
     curl \
     libpq-dev \
+    libicu-dev \ 
     postgresql-client \
-    && docker-php-ext-install pdo pdo_pgsql \
+    && docker-php-ext-install pdo pdo_pgsql intl \
     && rm -rf /var/lib/apt/lists/*
 
 # Instala o Composer globalmente
