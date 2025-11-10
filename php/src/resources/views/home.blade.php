@@ -8,15 +8,13 @@
 </head>
 <body>
 
-    <!-- ============================ LAYOUT PRINCIPAL ============================ -->
     <div class="layout-container">
 
-        <!-- ============================ SIDEBAR (ESQUERDA) ============================ -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <svg class="user-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                        <path fill-rule="evenodd" d="M14 14s-1-4-6-4-6 4-6 4 1 1 6 1 6-1 6-1z"/>
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    <path fill-rule="evenodd" d="M14 14s-1-4-6-4-6 4-6 4 1 1 6 1 6-1 6-1z"/>
                 </svg>
                 <span class="username">Bem-vindo, {{ auth()->user()->username }}!</span>
             </div>
@@ -50,7 +48,6 @@
             </div>
         </aside>
 
-        <!-- ============================ ÁREA PRINCIPAL (DIREITA) ============================ -->
         <main class="main-content">
 
             <header class="main-header">
@@ -90,9 +87,27 @@
                     </div>
                 </div>
 
-                <!-- ============================ DIV - BIBLIOTECA COMPARTILHADA ============================ -->
+                <!-- ============================ BIBLIOTECA COMPARTILHADA ============================ -->
                 <div id="shared" class="library-content">
                     <div class="file-table-container">
+                        <h2>📂 Pastas Compartilhadas</h2>
+                        @php
+                            $sharedFolders = $folders->filter(fn($f) => $f->is_shared ?? false);
+                        @endphp
+
+                        @if($sharedFolders->isEmpty())
+                            <p style="color:#777;">Nenhuma pasta compartilhada encontrada.</p>
+                        @else
+                            <ul class="folder-list">
+                                @foreach($sharedFolders as $folder)
+                                    <li class="folder-item">📁 {{ $folder->name }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+
+                        <hr>
+
+                        <h2>📄 Arquivos Compartilhados</h2>
                         <table class="file-table">
                             <thead>
                                 <tr>
@@ -105,53 +120,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($files->where('is_shared', true) as $file)
+                                @forelse($sharedFiles as $file)
                                     <tr>
                                         <td data-label="Nome">
-                                            <!-- Visualizar arquivo (abre em nova aba) -->
                                             <a href="{{ route('download', ['id' => $file->id, 'preview' => true]) }}" target="_blank">
                                                 {{ $file->file_name }}
                                             </a>
                                         </td>
-                                        <td data-label="Tamanho">
-                                            {{ \Illuminate\Support\Number::fileSize($file->file_size) }}
-                                        </td>
-
+                                        <td data-label="Tamanho">{{ \Illuminate\Support\Number::fileSize($file->file_size) }}</td>
                                         <td data-label="Tipo">{{ $file->file_type }}</td>
                                         <td data-label="Data de Upload">{{ $file->upload_date }}</td>
-                                        <td data-label="Dono">
-                                            {{ $file->owner ? $file->owner->apelido ?? $file->owner->username : 'Desconhecido' }}
-                                        </td>
+                                        <td data-label="Dono">{{ $file->owner ? ($file->owner->apelido ?? $file->owner->username) : 'Desconhecido' }}</td>
                                         <td data-label="Ações" class="file-actions">
-                                            <a href="{{ route('download', ['id' => $file->id]) }}" class="action-btn download" title="Baixar">⬇</a>
-
-                                            <form action="{{ route('files.share', $file->id) }}"
-                                                  method="POST"
-                                                  style="display:inline;"
-                                                  onsubmit="return confirmShare('{{ $file->is_shared ? 'descompartilhar' : 'compartilhar' }}')">
-                                                @csrf
-                                                <button type="submit"
-                                                        class="action-btn share"
-                                                        title="{{ $file->is_shared ? 'Descompartilhar' : 'Compartilhar' }}">
-                                                    ⤴
-                                                </button>
-                                            </form>
-
-                                            <form action="{{ route('files.delete', $file->id) }}"
-                                                  method="POST"
-                                                  style="display:inline;"
-                                                  onsubmit="return confirm('Tem certeza que deseja excluir este arquivo?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="action-btn delete" title="Excluir">🗑</button>
-                                            </form>
+                                            <!-- botões podem ser adicionados aqui, somente leitura para arquivos compartilhados -->
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" style="text-align: center; color: #999;">
-                                            Nenhum arquivo compartilhado encontrado.
-                                        </td>
+                                        <td colspan="6" style="text-align:center;color:#999;">Nenhum arquivo compartilhado encontrado.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -159,9 +145,23 @@
                     </div>
                 </div>
 
-                <!-- ============================ DIV - BIBLIOTECA PESSOAL ============================ -->
+                <!-- ============================ BIBLIOTECA PESSOAL ============================ -->
                 <div id="personal" class="library-content" style="display:none;">
                     <div class="file-table-container">
+                        <h2>📁 Minhas Pastas</h2>
+                        @if($folders->isEmpty())
+                            <p>Nenhuma pasta criada ainda.</p>
+                        @else
+                            <ul class="folder-list">
+                                @foreach($folders as $folder)
+                                    <li class="folder-item">📂 {{ $folder->name }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+
+                        <hr>
+
+                        <h2>📄 Meus Arquivos</h2>
                         <table class="file-table">
                             <thead>
                                 <tr>
@@ -169,50 +169,27 @@
                                     <th>Tamanho</th>
                                     <th>Tipo</th>
                                     <th>Data de Upload</th>
-                                    <th>Dono</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($files->where('uploaded_by', auth()->user()->id) as $file)
+                                @forelse($uploadedFiles as $file)
                                     <tr>
                                         <td data-label="Nome">
                                             <a href="{{ route('download', ['id' => $file->id, 'preview' => true]) }}" target="_blank">
                                                 {{ $file->file_name }}
                                             </a>
                                         </td>
-                                        <td data-label="Tamanho">
-                                            {{ \Illuminate\Support\Number::fileSize($file->file_size) }}
-                                        </td>
+                                        <td data-label="Tamanho">{{ \Illuminate\Support\Number::fileSize($file->file_size) }}</td>
                                         <td data-label="Tipo">{{ $file->file_type }}</td>
                                         <td data-label="Data de Upload">{{ $file->upload_date }}</td>
-                                        <td data-label="Dono">
-                                            {{ $file->owner ? $file->owner->apelido ?? $file->owner->username : 'Desconhecido' }}
-                                        </td>
                                         <td data-label="Ações" class="file-actions">
-                                            <a href="{{ route('download', ['id' => $file->id]) }}" 
-                                               class="action-btn download" 
-                                               title="Baixar"
-                                               onclick="return confirm('Deseja baixar este arquivo?')">
-                                                ⬇
-                                            </a>
-
-                                            <form action="{{ route('files.share', $file->id) }}"
-                                                  method="POST"
-                                                  style="display:inline;"
-                                                  onsubmit="return confirmShare('{{ $file->is_shared ? 'descompartilhar' : 'compartilhar' }}')">
+                                            <a href="{{ route('download', ['id' => $file->id]) }}" class="action-btn download" title="Baixar">⬇</a>
+                                            <form action="{{ route('files.share', $file->id) }}" method="POST" style="display:inline;" onsubmit="return confirmShare('{{ $file->is_shared ? 'descompartilhar' : 'compartilhar' }}')">
                                                 @csrf
-                                                <button type="submit"
-                                                        class="action-btn share"
-                                                        title="{{ $file->is_shared ? 'Descompartilhar' : 'Compartilhar' }}">
-                                                    ⤴
-                                                </button>
+                                                <button type="submit" class="action-btn share" title="{{ $file->is_shared ? 'Descompartilhar' : 'Compartilhar' }}">⤴</button>
                                             </form>
-
-                                            <form action="{{ route('files.delete', $file->id) }}"
-                                                  method="POST"
-                                                  style="display:inline;"
-                                                  onsubmit="return confirm('Tem certeza que deseja excluir este arquivo?')">
+                                            <form action="{{ route('files.delete', $file->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este arquivo?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="action-btn delete" title="Excluir">🗑</button>
@@ -221,9 +198,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" style="text-align: center; color: #999;">
-                                            Nenhum arquivo pessoal encontrado.
-                                        </td>
+                                        <td colspan="5" style="text-align:center;color:#999;">Nenhum arquivo pessoal encontrado.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -233,20 +208,14 @@
 
             </section>
         </main>
+    </div>
 
-    </div> <!-- fim layout-container -->
-
-    <!-- ============================ SCRIPT PARA TROCA DE ABAS E CONFIRMAÇÃO ============================ -->
     <script>
         function showLibrary(tab) {
             document.querySelectorAll('.library-content').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tab).style.display = 'block';
-            if (tab === 'personal') {
-                document.getElementById('btn-personal').classList.add('active');
-            } else {
-                document.getElementById('btn-shared').classList.add('active');
-            }
+            document.getElementById(`btn-${tab}`).classList.add('active');
         }
 
         function confirmShare(action) {
@@ -255,6 +224,5 @@
 
         showLibrary('shared');
     </script>
-
 </body>
 </html>
