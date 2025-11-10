@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS uploaded_files (
     is_shared BOOLEAN DEFAULT FALSE
 );
 
+
 -- Inserir usuário admin (senha: password)
 -- Hash bcrypt padrão do 'password'
 INSERT INTO users (username, password_hash, apelido, email, created_at, updated_at)
