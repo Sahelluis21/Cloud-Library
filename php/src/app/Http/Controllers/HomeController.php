@@ -12,29 +12,36 @@ class HomeController extends Controller
     /**
      * Lista os arquivos e pastas do usuário logado
      */
-    public function index()
+    public function index(Request $request)
     {
         $userId = auth()->id();
+        $currentFolderId = $request->get('folder_id'); // <- Pega o ID da pasta atual
 
-        // Pastas do usuário (somente raiz)
+        // Se estamos dentro de uma pasta, busca suas subpastas
         $folders = Folder::where('owner_id', $userId)
-                        ->whereNull('parent_id')
+                        ->where('parent_id', $currentFolderId)
                         ->get();
 
-        // Arquivos do usuário (não em pasta)
+        // Busca arquivos dentro da pasta atual (ou raiz se null)
         $uploadedFiles = UploadedFile::with('owner')
             ->where('uploaded_by', $userId)
-            ->whereNull('folder_id')
+            ->where('folder_id', $currentFolderId)
             ->orderBy('upload_date', 'desc')
             ->get();
 
-        // Arquivos compartilhados de todos os usuários
+        // Arquivos compartilhados (não muda)
         $sharedFiles = UploadedFile::with('owner')
             ->where('is_shared', true)
             ->orderBy('upload_date', 'desc')
             ->get();
 
-        return view('home', compact('folders', 'uploadedFiles', 'sharedFiles'));
+        // Nome da pasta atual (se houver)
+        $currentFolder = null;
+        if ($currentFolderId) {
+            $currentFolder = Folder::find($currentFolderId);
+        }
+
+        return view('home', compact('folders', 'uploadedFiles', 'sharedFiles', 'currentFolder'));
     }
 
     /**
@@ -48,7 +55,9 @@ class HomeController extends Controller
 
         $file = $request->file('arquivo');
         $uploadedBy = auth()->id();
+        $folderId = $request->input('folder_id'); // <- Captura o folder_id enviado pelo formulário
 
+        // Pasta base do usuário
         $userFolder = storage_path('uploads/user_' . $uploadedBy);
         if (!file_exists($userFolder)) {
             mkdir($userFolder, 0755, true);
@@ -69,10 +78,13 @@ class HomeController extends Controller
             'file_type'   => $file->getClientMimeType(),
             'upload_date' => now(),
             'uploaded_by' => $uploadedBy,
+            'folder_id'   => $folderId, // <- Associa o arquivo à pasta atual
             'is_shared'   => false,
         ]);
 
-        return back()->with('success', 'Arquivo enviado com sucesso!');
+        // Retorna para a pasta onde o upload foi feito
+        return redirect()->route('home', ['folder_id' => $folderId])
+                         ->with('success', 'Arquivo enviado com sucesso!');
     }
 
     /**

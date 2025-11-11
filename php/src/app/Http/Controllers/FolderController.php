@@ -9,6 +9,36 @@ use Illuminate\Support\Facades\Auth;
 
 class FolderController extends Controller
 {
+    
+    public function open($id)
+    {
+        $user = Auth::user();
+
+        // Pasta atual
+        $currentFolder = Folder::findOrFail($id);
+
+        // Subpastas dentro da pasta atual
+        $folders = Folder::where('parent_id', $id)
+                         ->where('owner_id', $user->id)
+                         ->get();
+
+        // Arquivos dentro da pasta atual
+        $uploadedFiles = UploadedFile::where('folder_id', $id)
+                                     ->where('uploaded_by', $user->id)
+                                     ->get();
+
+        // Pasta pai (para botão "voltar")
+        $parentFolder = $currentFolder->parent_id ? Folder::find($currentFolder->parent_id) : null;
+
+        return view('home', [
+            'folders' => $folders,
+            'uploadedFiles' => $uploadedFiles,
+            'sharedFiles' => collect([]), // mantém compatibilidade com o template
+            'currentFolder' => $currentFolder,
+            'parentFolder' => $parentFolder,
+        ]);
+    }
+    
     /**
      * Exibe todas as pastas do usuário logado (nível raiz)
      */

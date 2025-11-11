@@ -15,6 +15,7 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/files/share/{id}', [App\Http\Controllers\HomeController::class, 'share'])->name('files.share');
 Route::get('/download/{id}', [HomeController::class, 'download'])->name('download');
+Route::get('/folder/{id}', [App\Http\Controllers\FolderController::class, 'open'])->name('folder.open');
 
 
 
