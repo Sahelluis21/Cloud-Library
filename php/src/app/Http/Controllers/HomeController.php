@@ -10,42 +10,49 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     /**
-     * Lista os arquivos e pastas do usuário logado
+     * Lista os arquivos e pastas do usuário logado.
+     * Mostra conteúdo da pasta atual (ou raiz se não houver).
      */
     public function index(Request $request)
     {
         $userId = auth()->id();
-        $currentFolderId = $request->get('folder_id'); // <- Pega o ID da pasta atual
+        $currentFolderId = $request->get('folder_id'); // ID da pasta atual (ou null)
 
-        // Se estamos dentro de uma pasta, busca suas subpastas
+        // 🔹 Busca subpastas dentro da pasta atual (ou raiz)
         $folders = Folder::where('owner_id', $userId)
                         ->where('parent_id', $currentFolderId)
                         ->get();
 
-        // Busca arquivos dentro da pasta atual (ou raiz se null)
+        // 🔹 Busca arquivos dentro da pasta atual
         $uploadedFiles = UploadedFile::with('owner')
             ->where('uploaded_by', $userId)
             ->where('folder_id', $currentFolderId)
             ->orderBy('upload_date', 'desc')
             ->get();
 
-        // Arquivos compartilhados (não muda)
+        // 🔹 Arquivos compartilhados (independe da pasta)
         $sharedFiles = UploadedFile::with('owner')
             ->where('is_shared', true)
             ->orderBy('upload_date', 'desc')
             ->get();
 
-        // Nome da pasta atual (se houver)
+        // 🔹 Identifica pasta atual e sua pasta pai
         $currentFolder = null;
+        $parentFolder = null;
+
         if ($currentFolderId) {
             $currentFolder = Folder::find($currentFolderId);
+
+            if ($currentFolder && $currentFolder->parent_id) {
+                $parentFolder = Folder::find($currentFolder->parent_id);
+            }
         }
 
-        return view('home', compact('folders', 'uploadedFiles', 'sharedFiles', 'currentFolder'));
+        return view('home', compact('folders', 'uploadedFiles', 'sharedFiles', 'currentFolder', 'parentFolder'));
     }
 
     /**
-     * Faz upload de um arquivo
+     * Faz upload de um arquivo para a pasta atual (ou raiz se nenhuma).
      */
     public function upload(Request $request)
     {
@@ -55,36 +62,55 @@ class HomeController extends Controller
 
         $file = $request->file('arquivo');
         $uploadedBy = auth()->id();
-        $folderId = $request->input('folder_id'); // <- Captura o folder_id enviado pelo formulário
+        $folderId = $request->input('folder_id'); // <- pasta atual (ou null)
 
-        // Pasta base do usuário
+        // 🔹 Pasta base do usuário (garante diretório físico)
         $userFolder = storage_path('uploads/user_' . $uploadedBy);
         if (!file_exists($userFolder)) {
             mkdir($userFolder, 0755, true);
         }
 
+        // 🔹 Caso o arquivo esteja dentro de uma pasta lógica
+        $folderPath = $userFolder;
+        $relativePath = 'storage/uploads/user_' . $uploadedBy;
+
+        if ($folderId) {
+            $folder = Folder::find($folderId);
+
+            if ($folder) {
+                $folderPath .= '/' . $folder->name;
+                $relativePath .= '/' . $folder->name;
+
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0755, true);
+                }
+            }
+        }
+
+        // 🔹 Gera nome único para o arquivo
         $timestamp = time();
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $file->getClientOriginalExtension();
         $fileName = $originalName . '_' . $timestamp . '.' . $extension;
 
-        $file->move($userFolder, $fileName);
-        $relativePath = 'storage/uploads/user_' . $uploadedBy . '/' . $fileName;
+        // 🔹 Move arquivo fisicamente
+        $file->move($folderPath, $fileName);
 
+        // 🔹 Salva no banco de dados
         UploadedFile::create([
             'file_name'   => $fileName,
-            'file_path'   => $relativePath,
-            'file_size'   => filesize($userFolder . '/' . $fileName),
+            'file_path'   => $relativePath . '/' . $fileName,
+            'file_size'   => filesize($folderPath . '/' . $fileName),
             'file_type'   => $file->getClientMimeType(),
             'upload_date' => now(),
             'uploaded_by' => $uploadedBy,
-            'folder_id'   => $folderId, // <- Associa o arquivo à pasta atual
+            'folder_id'   => $folderId, // <- mantém vínculo lógico
             'is_shared'   => false,
         ]);
 
-        // Retorna para a pasta onde o upload foi feito
+        // 🔹 Redireciona para a pasta atual (mantém o contexto)
         return redirect()->route('home', ['folder_id' => $folderId])
-                         ->with('success', 'Arquivo enviado com sucesso!');
+                        ->with('success', 'Arquivo enviado com sucesso!');
     }
 
     /**

@@ -60,7 +60,7 @@
                 <button type="submit" class="logout-btn">Sair</button>
             </form>
         </header>
-        
+
             @if(isset($currentFolder))
                  <div class="folder-path">
                     <p>📁 Dentro da pasta: <strong>{{ $currentFolder->name }}</strong></p>
@@ -87,7 +87,10 @@
                     </select>
 
                     <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
+                         @csrf
+                        <!-- 🔹 Envia o ID da pasta atual, se houver -->
+                        <input type="hidden" name="folder_id" value="{{ $currentFolder->id ?? null }}">
+    
                         <input type="file" name="arquivo" required>
                         <button type="submit">Enviar</button>
                     </form>
