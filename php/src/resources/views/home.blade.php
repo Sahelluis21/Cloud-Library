@@ -61,7 +61,11 @@
             </form>
         </header>
 
-            @if(isset($currentFolder))
+        <section class="documents-container">
+            <div class="documents-header">
+                <h2>Arquivos Disponíveis ☁️</h2>
+
+             @if(isset($currentFolder))
                  <div class="folder-path">
                     <p>📁 Dentro da pasta: <strong>{{ $currentFolder->name }}</strong></p>
                     @if($parentFolder)
@@ -71,10 +75,6 @@
                     @endif
                 </div>
             @endif
-
-        <section class="documents-container">
-            <div class="documents-header">
-                <h2>Arquivos Disponíveis ☁️</h2>
 
                 <div class="documents-controls">
                     <select id="sortOrder" class="form-select">
