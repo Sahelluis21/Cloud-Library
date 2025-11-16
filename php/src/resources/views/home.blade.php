@@ -11,44 +11,64 @@
     <!-- ============================ LAYOUT PRINCIPAL ============================ -->
     <div class="layout-container">
 
-        <!-- ============================ SIDEBAR (ESQUERDA) ============================ -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <svg class="user-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                        <path fill-rule="evenodd" d="M14 14s-1-4-6-4-6 4-6 4 1 1 6 1 6-1 6-1z"/>
-                </svg>
-                <span class="username">Bem-vindo, {{ auth()->user()->username }}!</span>
-            </div>
+            <aside class="sidebar">
 
-            <nav class="library-nav">
-                <button class="nav-btn active" id="btn-shared" onclick="showLibrary('shared')">
-                    <i class="bi bi-folder2-open me-2"></i> Biblioteca Compartilhada
-                </button>
-                <button class="nav-btn" id="btn-personal" onclick="showLibrary('personal')">
-                    <i class="bi bi-folder me-2"></i> Biblioteca Pessoal
-                </button>
-            </nav>
+                <!-- HEADER DO USUÁRIO -->
+                <div class="sidebar-header">
+                    <svg class="user-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                        viewBox="0 0 16 16">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        <path fill-rule="evenodd" d="M14 14s-1-4-6-4-6 4-6 4 1 1 6 1 6-1 6-1z" />
+                    </svg>
 
-            <div class="storage-section">
-                <h3><i class="bi bi-hdd me-2"></i> Espaço de Armazenamento</h3>
-                <div class="storage-progress">
-                    <div class="storage-progress-filled" style="width: 45%;"></div>
+                    <span class="username-text">Olá, {{ auth()->user()->username }}</span>
                 </div>
-                <p class="storage-details">
-                    <i class="bi bi-pie-chart me-1"></i> 450MB de 1GB usados
-                </p>
-            </div>
 
-            <div class="info-section">
-                <h3><i class="bi bi-info-circle me-2"></i> Informações Importantes</h3>
-                <ul>
-                    <li>Armazenamento seguro com criptografia</li>
-                    <li>Suporte a arquivos de até 2GB</li>
-                    <li>Compatível com todos os formatos comuns</li>
-                </ul>
-            </div>
-        </aside>
+                <div class="sidebar-divider"></div>
+
+                <!-- NAVEGAÇÃO -->
+                <nav class="library-nav">
+                    <button class="nav-btn active" id="btn-shared" onclick="showLibrary('shared')">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Biblioteca Compartilhada</span>
+                    </button>
+
+                    <button class="nav-btn" id="btn-personal" onclick="showLibrary('personal')">
+                        <i class="bi bi-person-badge"></i>
+                        <span>Minha Biblioteca</span>
+                    </button>
+                </nav>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- ARMAZENAMENTO -->
+                <div class="storage-section">
+                    <h3><i class="bi bi-hdd-fill"></i> Armazenamento</h3>
+
+                    <div class="storage-progress">
+                        <div class="storage-progress-filled" style="width: 45%;"></div>
+                    </div>
+
+                    <p class="storage-details">
+                        450MB de 2GB usados
+                    </p>
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- INFORMAÇÕES -->
+                <div class="info-section">
+                    <h3><i class="bi bi-info-circle-fill"></i> Informações</h3>
+                    <ul>
+                        <li>Criptografia de ponta</li>
+                        <li>Arquivos até 2GB</li>
+                        <li>Compatível com todos os formatos</li>
+                    </ul>
+                </div>
+
+            </aside>
+
+
 
         <!-- ============================ ÁREA PRINCIPAL (DIREITA) ============================ -->
         <main class="main-content">
@@ -237,23 +257,32 @@
 
     <!-- ============================ SCRIPT PARA TROCA DE ABAS E CONFIRMAÇÃO ============================ -->
     <script>
-        function showLibrary(tab) {
-            document.querySelectorAll('.library-content').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tab).style.display = 'block';
-            if (tab === 'personal') {
-                document.getElementById('btn-personal').classList.add('active');
-            } else {
-                document.getElementById('btn-shared').classList.add('active');
-            }
-        }
+    function showLibrary(tab) {
+        localStorage.setItem('currentTab', tab);
 
-        function confirmShare(action) {
-            return confirm(`Tem certeza que deseja ${action} este arquivo?`);
-        }
+        document.querySelectorAll('.library-content').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
-        showLibrary('shared');
-    </script>
+        document.getElementById(tab).style.display = 'block';
+
+        if (tab === 'personal') {
+            document.getElementById('btn-personal').classList.add('active');
+        } else {
+            document.getElementById('btn-shared').classList.add('active');
+        }
+    }
+
+    function confirmShare(action) {
+        return confirm(`Tem certeza que deseja ${action} este arquivo?`);
+    }
+
+    // Mantém a aba escolhida após reload
+    window.onload = () => {
+        const savedTab = localStorage.getItem('currentTab') || 'shared';
+        showLibrary(savedTab);
+    };
+</script>
+
 
 </body>
 </html>

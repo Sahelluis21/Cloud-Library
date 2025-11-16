@@ -25,66 +25,131 @@ body {
 }
 
 /* ============================ */
-/*         SIDEBAR              */
+/*         SIDEBAR UPGRADE      */
 /* ============================ */
+
 .sidebar {
   width: 300px;
-  background: #18181d;
-  border-right: 1px solid #2c2c34;
+  background: #16161b;
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 2rem 1.5rem;
-  position: fixed;
-  top: 0;
-  bottom: 0;
+  gap: 2rem;
+  border-right: 1px solid #2c2c34;
 }
 
 .sidebar-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.sidebar-header .site-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: center;         /* Centraliza o texto horizontalmente */
-  width: 100%;                /* Garante que o texto use toda a largura do header */
-  display: block;             /* Garante comportamento previsível do alinhamento */
-  margin: 0 auto;             /* Centraliza dentro do container, caso haja margens */
-  padding: 0.5rem 0;  
-}
-
-.library-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  align-items: center;
+  gap: .5rem;
 }
 
+.user-icon {
+  color: #cfcfcf;
+}
+
+.username-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #eee;
+}
+
+/* Divisor elegante */
+.sidebar-divider {
+  width: 100%;
+  height: 1px;
+  background: #2c2c34;
+  margin: 1.5rem 0;
+}
+
+/* Botões da sidebar */
 .nav-btn {
-  background: #23232a;
-  color: #ddd;
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  font-size: .95rem;
+  padding: .75rem 1rem;
+  width: 100%;
   border: none;
-  border-radius: 10px;
-  padding: 0.7rem 1rem;
-  text-align: left;
+  background: transparent;
+  color: #ddd;
   cursor: pointer;
-  font-size: 0.95rem;
+  border-radius: 8px;
   transition: 0.2s;
 }
 
 .nav-btn:hover {
-  background: #2d2d36;
+  background: #23232a;
 }
 
 .nav-btn.active {
-  background: #005cfb;
+  background: #007bff;
   color: #fff;
+}
+
+.nav-btn i {
+  font-size: 1.1rem;
+  color: #bbb;
+}
+
+.nav-btn.active i {
+  color: #fff;
+}
+
+/* Seção de armazenamento */
+.storage-section h3,
+.info-section h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: .6rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: #ccc;
+}
+
+/* Barra de progresso */
+.storage-progress {
+  width: 100%;
+  height: 9px;
+  background: #222228;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: .4rem;
+}
+
+.storage-progress-filled {
+  height: 100%;
+  background: linear-gradient(90deg, #0069ff, #4aa3ff);
+  border-radius: 6px;
+}
+
+/* Detalhes de armazenamento */
+.storage-details {
+  font-size: .85rem;
+  color: #aaa;
+}
+
+/* Ajuste da info-section */
+.info-section ul {
+  margin-top: .4rem;
+  padding-left: 1.2rem;
+  color: #bbb;
+  font-size: .85rem;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.info-section li::marker {
+  color: #4aa3ff;
 }
 
 /* ============================ */
 /*        ÁREA PRINCIPAL        */
 /* ============================ */
+
 .main-content {
   margin-left: 300px;
   flex: 1;
@@ -94,16 +159,16 @@ body {
   overflow-y: auto;
 }
 
+/* 🔥 Centralizar Cloud Library corretamente */
 .main-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 
-.username {
-  font-weight: 500;
-  color: #ddd;
+.user-info {
+    justify-self: center;
 }
 
 .logout-btn {
@@ -114,6 +179,7 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: 0.2s;
+  justify-self: end;
 }
 
 .logout-btn:hover {
@@ -123,6 +189,7 @@ body {
 /* ============================ */
 /*        DOCUMENTOS / ARQUIVOS */
 /* ============================ */
+
 .documents-container {
   background: #18181d;
   border-radius: 16px;
@@ -161,6 +228,7 @@ body {
 /* ============================ */
 /*   LISTAGEM DE ARQUIVOS      */
 /* ============================ */
+
 .file-table-container {
   background: #18181d;
   border-radius: 14px;
@@ -212,7 +280,7 @@ body {
 .file-table td a {
   color: inherit;
   text-decoration: none;
-  pointer-events: auto; /* corrigido: agora é clicável */
+  pointer-events: auto;
 }
 
 /* Arredondamento das bordas */
@@ -220,6 +288,7 @@ body {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
+
 .file-table tbody tr td:last-child {
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -228,6 +297,7 @@ body {
 /* ============================ */
 /*        BOTÕES DE AÇÃO        */
 /* ============================ */
+
 .file-actions {
   display: flex;
   align-items: center;
@@ -239,7 +309,6 @@ body {
   margin: 0;
   padding: 0;
   background: transparent;
-  border: 0;
 }
 
 .file-actions .action-btn,
@@ -256,8 +325,6 @@ body {
   text-decoration: none;
   cursor: pointer;
   transition: 0.12s;
-  position: relative;
-  z-index: 2;
 }
 
 .file-actions .action-btn:hover,
@@ -274,6 +341,7 @@ body {
 /* ============================ */
 /*        RESPONSIVIDADE        */
 /* ============================ */
+
 @media (max-width: 900px) {
   .sidebar {
     width: 230px;
