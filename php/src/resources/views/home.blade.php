@@ -138,7 +138,9 @@
                                         </td>
 
                                         <td data-label="Tipo">{{ $file->file_type }}</td>
-                                        <td data-label="Data de Upload">{{ $file->upload_date }}</td>
+                                        <td data-label="Data de Upload">
+                                            {{ \Carbon\Carbon::parse($file->upload_date)->format('d/m/y - H:i') }}
+                                        </td>
                                         <td data-label="Dono">
                                             {{ $file->owner ? $file->owner->apelido ?? $file->owner->username : 'Desconhecido' }}
                                         </td>
@@ -206,7 +208,9 @@
                                         </td>
 
                                         <td data-label="Tipo">{{ $file->file_type }}</td>
-                                        <td data-label="Data de Upload">{{ $file->upload_date }}</td>
+                                        <td data-label="Data de Upload">
+                                            {{ \Carbon\Carbon::parse($file->upload_date)->format('d/m/y - H:i') }}
+                                        </td>
                                         <td data-label="Dono">
                                             {{ $file->owner ? $file->owner->apelido ?? $file->owner->username : 'Desconhecido' }}
                                         </td>
