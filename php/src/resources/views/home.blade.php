@@ -134,8 +134,9 @@
                                             </a>
                                         </td>
                                         <td data-label="Tamanho">
-                                            {{ number_format($file->file_size / 1024, 2) }} KB
+                                            {{ \Illuminate\Support\Number::fileSize($file->file_size) }}
                                         </td>
+
                                         <td data-label="Tipo">{{ $file->file_type }}</td>
                                         <td data-label="Data de Upload">{{ $file->upload_date }}</td>
                                         <td data-label="Dono">
@@ -201,8 +202,9 @@
                                             </a>
                                         </td>
                                         <td data-label="Tamanho">
-                                            {{ number_format($file->file_size / 1024, 2) }} KB
+                                             {{ \Illuminate\Support\Number::fileSize($file->file_size) }}
                                         </td>
+
                                         <td data-label="Tipo">{{ $file->file_type }}</td>
                                         <td data-label="Data de Upload">{{ $file->upload_date }}</td>
                                         <td data-label="Dono">
