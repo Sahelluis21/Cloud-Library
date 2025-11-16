@@ -17,7 +17,10 @@ class HomeController extends Controller
     public function index()
     {
         $userId = auth()->id();
-
+        
+        $usedStorage = UploadedFile::where('uploaded_by', $userId)->sum('file_size');
+        $storageLimit = 5 * 1024 * 1024 * 1024; // 5GB
+        $percentage = ($usedStorage / $storageLimit) * 100;
         // Busca apenas arquivos do usuário ou compartilhados
         $files = UploadedFile::with('owner')
             ->where(function($query) use ($userId) {
@@ -27,7 +30,7 @@ class HomeController extends Controller
             ->orderBy('upload_date', 'desc')
             ->get();
 
-        return view('home', compact('files'));
+        return view('home', compact('files', 'usedStorage', 'storageLimit', 'percentage'));
     }
 
     /**

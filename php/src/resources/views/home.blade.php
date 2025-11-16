@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cloud Library ☁️</title>
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
@@ -46,11 +48,13 @@
                     <h3><i class="bi bi-hdd-fill"></i> Armazenamento</h3>
 
                     <div class="storage-progress">
-                        <div class="storage-progress-filled" style="width: 45%;"></div>
+                        <div class="storage-progress-filled" style="width: {{ number_format($percentage, 2) }}%;"></div>
                     </div>
 
                     <p class="storage-details">
-                        450MB de 2GB usados
+                        {{ number_format($usedStorage / (1024 * 1024), 2) }} MB
+                        de
+                        {{ number_format($storageLimit / (1024 * 1024 * 1024), 0) }} GB usados
                     </p>
                 </div>
 
@@ -89,20 +93,26 @@
                     <h2>Arquivos Disponíveis ☁️</h2>
 
                     <div class="documents-controls">
-                        <select id="sortOrder" class="form-select">
-                            <option value="newest">Últimos adicionados</option>
-                            <option value="oldest">Primeiros adicionados</option>
-                            <option value="largest">Maior tamanho</option>
-                            <option value="smallest">Menor tamanho</option>
-                            <option value="az">Nome A → Z</option>
-                            <option value="za">Nome Z → A</option>
-                        </select>
-
-                        <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
+                    
+                        <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
                             @csrf
-                            <input type="file" name="arquivo" required>
-                            <button type="submit">Enviar</button>
+                            
+                            <input type="file" name="arquivo" id="arquivoInput" style="display:none" required>
+
+                            <button type="button" class="btn-novo-upload" onclick="document.getElementById('arquivoInput').click()">
+                                <span class="plus">+</span> Novo
+                            </button>
                         </form>
+
+                        <script>
+                        document.getElementById('arquivoInput').addEventListener('change', function() {
+                            if (this.files.length > 0) {
+                                document.getElementById('uploadForm').submit();
+                            }
+                        });
+                        </script>
+
+
 
                         @if (session('success'))
                             <p style="color:green;">{{ session('success') }}</p>
