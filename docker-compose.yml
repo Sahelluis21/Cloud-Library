@@ -1,66 +1,51 @@
+version: "3.9"
+
 services:
   nginx:
-    image: nginx:alpine
+    image: sahelluis/cloud-nginx:1.0
     ports:
       - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./php/src:/var/www/html
-      - ./uploads:/var/www/html/storage/uploads
-      - ./nginx/certs:/etc/nginx/certs:ro
     depends_on:
-      - php-app
-    networks:
-      - cloud-library
-    restart: unless-stopped
-
-  php-app:
-    build:
-      context: ./php
-      args:
-        UID: 1000
-        GID: 1000
+      - php
     volumes:
-      - ./php/src:/var/www/html
-      - ./uploads:/var/www/html/storage/uploads
+      - uploads:/var/www/html/public/uploads
+    networks:
+      - cloudnet
+    deploy:
+      replicas: 1
+
+  php:
+    image: sahelluis/cloud-php:1.0
     environment:
-      - DB_HOST=${DB_HOST}
-      - DB_DATABASE=${DB_DATABASE}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-    depends_on:
-      postgres:
-        condition: service_healthy
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=cloud_library
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+    volumes:
+      - uploads:/var/www/html/public/uploads
     networks:
-      - cloud-library
-    restart: unless-stopped
+      - cloudnet
+    deploy:
+      replicas: 1
 
-
-
-  postgres:
+  db:
     image: postgres:13
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_DB: ${DB_DATABASE}
-    ports:
-      - "127.0.0.1:5432:5432"
+      - POSTGRES_DB=cloud_library
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./initdb:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - pgdata:/var/lib/postgresql/data
     networks:
-      - cloud-library
-    restart: unless-stopped
+      - cloudnet
+    deploy:
+      replicas: 1
 
 volumes:
-  postgres_data:
+  uploads:
+  pgdata:
 
 networks:
-  cloud-library:
-    driver: bridge
+  cloudnet:
+    driver: overlay
