@@ -427,3 +427,57 @@ body {
   margin-right: 2px;
   color: #ffffff;
 }
+
+/* ============================ */
+/*        POP-UPS SIDEBAR        */
+/* ============================ */
+
+#notification-container {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  width: calc(100% - 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  z-index: 999;
+}
+
+.notification-popup {
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.9rem;
+  box-shadow: 0 0 12px rgba(0,0,0,0.4);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.4s forwards, fadeOut 0.4s forwards 3s; /* 3s antes de desaparecer */
+}
+
+.notification-upload {
+  background-color: #28a745; /* verde */
+}
+
+.notification-delete {
+  background-color: #dc3545; /* vermelho */
+}
+
+.notification-share {
+  background-color: #ffc107; /* amarelo */
+  color: #000;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}

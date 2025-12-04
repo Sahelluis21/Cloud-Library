@@ -11,9 +11,6 @@
 <body>
     <div class="login-container">
         <div class="brand-container">
-            <div class="logo-circle">
-                <img src="{{ asset('assets/logo.png') }}" alt="Logo">
-            </div>
             <h1 class="brand-name">Cloud Library</h1>
         </div>
 

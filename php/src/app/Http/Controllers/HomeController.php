@@ -72,7 +72,7 @@ class HomeController extends Controller
             'is_shared'   => false,
         ]);
 
-        return back()->with('success', 'Arquivo enviado com sucesso!');
+        return back()->with('upload', 'Arquivo enviado com sucesso!');
     }
 
     /**
@@ -89,7 +89,7 @@ class HomeController extends Controller
 
         $file->deleteFile();
 
-        return back()->with('success', 'Arquivo excluído com sucesso!');
+        return back()->with('delete', 'Arquivo excluído com sucesso!');
     }
 
 
@@ -173,7 +173,10 @@ class HomeController extends Controller
         $file->is_shared = !$file->is_shared;
         $file->save();
 
-        return back()->with('success', 'Arquivo atualizado com sucesso!');
+       return back()->with('share', $file->is_shared 
+            ? 'Arquivo compartilhado com sucesso!' 
+            : 'Arquivo descompartilhado com sucesso!');
+
     }
 
     

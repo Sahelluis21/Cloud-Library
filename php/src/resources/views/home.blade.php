@@ -70,6 +70,8 @@
                     </ul>
                 </div>
 
+                <div id="notification-container"></div>
+
             </aside>
 
 
@@ -112,11 +114,24 @@
                         });
                         </script>
 
+                       @if (session('upload'))
+                            <script>
+                                showNotification("{{ session('upload') }}", "upload");
+                            </script>
+                            @endif
 
+                            @if (session('delete'))
+                            <script>
+                                showNotification("{{ session('delete') }}", "delete");
+                            </script>
+                            @endif
 
-                        @if (session('success'))
-                            <p style="color:green;">{{ session('success') }}</p>
+                            @if (session('share'))
+                            <script>
+                                showNotification("{{ session('share') }}", "share");
+                            </script>
                         @endif
+
                     </div>
                 </div>
 
@@ -299,6 +314,36 @@
     };
 </script>
 
+<script>
+function showNotification(message, type = 'upload') {
+    const container = document.getElementById('notification-container');
+    
+    const popup = document.createElement('div');
+    popup.classList.add('notification-popup');
+
+    switch(type) {
+        case 'upload':
+            popup.classList.add('notification-upload');
+            break;
+        case 'delete':
+            popup.classList.add('notification-delete');
+            break;
+        case 'share':
+            popup.classList.add('notification-share');
+            break;
+        default:
+            popup.classList.add('notification-upload');
+    }
+
+    popup.textContent = message;
+    container.appendChild(popup);
+
+    // Remove após animação
+    setTimeout(() => {
+        container.removeChild(popup);
+    }, 3400); // 400ms slideIn + 3000ms visível
+}
+</script>
 
 </body>
 </html>
