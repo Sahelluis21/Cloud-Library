@@ -48,6 +48,12 @@ RUN { \
     echo 'max_input_time = 3600'; \
 } > /usr/local/etc/php/conf.d/uploads.ini
 
+# Configura o PHP-FPM para escutar em TCP (Swarm) e remove allowed_clients
+RUN sed -i 's|^listen = .*|listen = 9000|' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's|;listen.mode = 0660|listen.mode = 0666|' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's|^listen.allowed_clients|;listen.allowed_clients|' /usr/local/etc/php-fpm.d/www.conf
+
+    
 # Define o usuário padrão do container
 USER devuser
 

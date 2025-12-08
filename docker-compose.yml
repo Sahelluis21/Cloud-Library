@@ -5,46 +5,52 @@ services:
     image: sahelluis/cloud-nginx:1.0
     ports:
       - "80:80"
-    depends_on:
-      - php
     volumes:
       - uploads:/var/www/html/public/uploads
     networks:
       - cloudnet
+    depends_on:
+      - php
     deploy:
       replicas: 1
 
   php:
-    image: sahelluis/cloud-php:1.0
+    image: sahelluis/cloud-php:1.3
     environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_DATABASE=cloud_library
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: cloud_library
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
     volumes:
       - uploads:/var/www/html/public/uploads
     networks:
       - cloudnet
     deploy:
       replicas: 1
+      restart_policy:
+        condition: on-failure
 
   db:
     image: postgres:13
     environment:
-      - POSTGRES_DB=cloud_library
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: cloud_library
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
       - cloudnet
     deploy:
       replicas: 1
+      restart_policy:
+        condition: on-failure
 
 volumes:
   uploads:
+    driver: local
   pgdata:
+    driver: local
 
 networks:
   cloudnet:
