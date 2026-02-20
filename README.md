@@ -49,17 +49,12 @@ Separação clara entre:
 
 ---
 
-## 🛠️ Guia de Implementação e Execução
-
 ### 📋 Pré-requisitos
 
 - Docker instalado
 - Docker Compose habilitado
 - Docker Swarm inicializado *(opcional)*
 
----
-
-## 🛠️ Guia de Implementação e Execução
 
 ### 🐧 Guia de Implantação - Ubuntu
 
@@ -73,7 +68,7 @@ Este procedimento foi validado em ambiente Ubuntu.
 git clone https://github.com/Sahelluis21/Cloud-Library.git
 cd Cloud-Library
 
-### 2️⃣ Construir e iniciar os containers
+2️⃣ Construir e iniciar os containers
 docker compose up --build
 
 3️⃣ Acessar o container da aplicação
