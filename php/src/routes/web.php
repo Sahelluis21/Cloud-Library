@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\FolderController;
 
 Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
 Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
@@ -15,17 +14,7 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/files/share/{id}', [App\Http\Controllers\HomeController::class, 'share'])->name('files.share');
 Route::get('/download/{id}', [HomeController::class, 'download'])->name('download');
-Route::get('/folder/{id}', [App\Http\Controllers\FolderController::class, 'open'])->name('folder.open');
-Route::post('/share/{id}', [HomeController::class, 'toggleShare'])->name('share');
 
-
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/folders', [FolderController::class, 'index'])->name('folders.index');
-    Route::post('/folders', [FolderController::class, 'store'])->name('folders.store');
-    Route::get('/folders/{id}', [FolderController::class, 'show'])->name('folders.show');
-    Route::delete('/folders/{id}', [FolderController::class, 'destroy'])->name('folders.destroy');
-});
 
 
 

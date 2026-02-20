@@ -3,56 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\UploadedFile;
-use App\Models\Folder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Routing\Controller;
 
 class HomeController extends Controller
 {
     /**
-     * Lista os arquivos e pastas do usuário logado.
-     * Mostra conteúdo da pasta atual (ou raiz se não houver).
+     * Lista os arquivos do usuário logado e arquivos compartilhados
      */
-    public function index(Request $request)
+    public function index()
     {
         $userId = auth()->id();
-        $currentFolderId = $request->get('folder_id'); // ID da pasta atual (ou null)
-
-        // 🔹 Busca subpastas dentro da pasta atual (ou raiz)
-        $folders = Folder::where('owner_id', $userId)
-                        ->where('parent_id', $currentFolderId)
-                        ->get();
-
-        // 🔹 Busca arquivos dentro da pasta atual
-        $uploadedFiles = UploadedFile::with('owner')
-            ->where('uploaded_by', $userId)
-            ->where('folder_id', $currentFolderId)
+        
+        $usedStorage = UploadedFile::where('uploaded_by', $userId)->sum('file_size');
+        $storageLimit = 5 * 1024 * 1024 * 1024; // 5GB
+        $percentage = ($usedStorage / $storageLimit) * 100;
+        // Busca apenas arquivos do usuário ou compartilhados
+        $files = UploadedFile::with('owner')
+            ->where(function($query) use ($userId) {
+                $query->where('uploaded_by', $userId)
+                      ->orWhere('is_shared', true);
+            })
             ->orderBy('upload_date', 'desc')
             ->get();
 
-        // 🔹 Arquivos compartilhados (independe da pasta)
-        $sharedFiles = UploadedFile::with('owner')
-            ->where('is_shared', true)
-            ->orderBy('upload_date', 'desc')
-            ->get();
-
-        // 🔹 Identifica pasta atual e sua pasta pai
-        $currentFolder = null;
-        $parentFolder = null;
-
-        if ($currentFolderId) {
-            $currentFolder = Folder::find($currentFolderId);
-
-            if ($currentFolder && $currentFolder->parent_id) {
-                $parentFolder = Folder::find($currentFolder->parent_id);
-            }
-        }
-
-        return view('home', compact('folders', 'uploadedFiles', 'sharedFiles', 'currentFolder', 'parentFolder'));
+        return view('home', compact('files', 'usedStorage', 'storageLimit', 'percentage'));
     }
 
     /**
-     * Faz upload de um arquivo para a pasta atual (ou raiz se nenhuma).
+     * Faz upload de um arquivo
      */
     public function upload(Request $request)
     {
@@ -61,56 +43,36 @@ class HomeController extends Controller
         ]);
 
         $file = $request->file('arquivo');
-        $uploadedBy = auth()->id();
-        $folderId = $request->input('folder_id'); // <- pasta atual (ou null)
+        $uploadedBy = auth()->id(); // ID do usuário logado
 
-        // 🔹 Pasta base do usuário (garante diretório físico)
+        // Pasta base do usuário
         $userFolder = storage_path('uploads/user_' . $uploadedBy);
         if (!file_exists($userFolder)) {
             mkdir($userFolder, 0755, true);
         }
 
-        // 🔹 Caso o arquivo esteja dentro de uma pasta lógica
-        $folderPath = $userFolder;
-        $relativePath = 'storage/uploads/user_' . $uploadedBy;
-
-        if ($folderId) {
-            $folder = Folder::find($folderId);
-
-            if ($folder) {
-                $folderPath .= '/' . $folder->name;
-                $relativePath .= '/' . $folder->name;
-
-                if (!file_exists($folderPath)) {
-                    mkdir($folderPath, 0755, true);
-                }
-            }
-        }
-
-        // 🔹 Gera nome único para o arquivo
+        // Nome único para evitar conflitos
         $timestamp = time();
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $file->getClientOriginalExtension();
         $fileName = $originalName . '_' . $timestamp . '.' . $extension;
 
-        // 🔹 Move arquivo fisicamente
-        $file->move($folderPath, $fileName);
+        // Caminho final
+        $file->move($userFolder, $fileName);
+        $relativePath = 'storage/uploads/user_' . $uploadedBy . '/' . $fileName;
 
-        // 🔹 Salva no banco de dados
+        // Inserir no banco
         UploadedFile::create([
             'file_name'   => $fileName,
-            'file_path'   => $relativePath . '/' . $fileName,
-            'file_size'   => filesize($folderPath . '/' . $fileName),
+            'file_path'   => $relativePath,
+            'file_size'   => filesize($userFolder . '/' . $fileName),
             'file_type'   => $file->getClientMimeType(),
             'upload_date' => now(),
             'uploaded_by' => $uploadedBy,
-            'folder_id'   => $folderId, // <- mantém vínculo lógico
             'is_shared'   => false,
         ]);
 
-        // 🔹 Redireciona para a pasta atual (mantém o contexto)
-        return redirect()->route('home', ['folder_id' => $folderId])
-                        ->with('success', 'Arquivo enviado com sucesso!');
+        return back()->with('upload', 'Arquivo enviado com sucesso!');
     }
 
     /**
@@ -120,32 +82,34 @@ class HomeController extends Controller
     {
         $file = UploadedFile::findOrFail($id);
 
+        // Verifica se o usuário logado é o dono
         if ($file->uploaded_by != auth()->id()) {
             abort(403, 'Acesso negado');
         }
 
         $file->deleteFile();
 
-        return back()->with('success', 'Arquivo excluído com sucesso!');
+        return back()->with('delete', 'Arquivo excluído com sucesso!');
     }
 
-    /**
-     * Download e pré-visualização
-     */
+
     public function download(Request $request, $id)
     {
         $file = UploadedFile::findOrFail($id);
 
+        // Validação de permissão
         if (!$file->is_shared && Auth::id() !== $file->uploaded_by) {
             abort(403, 'Você não tem permissão para acessar este arquivo.');
         }
 
+        // Caminho físico
         $filePath = storage_path('uploads/user_' . $file->uploaded_by . '/' . $file->file_name);
 
         if (!file_exists($filePath)) {
             abort(404, 'Arquivo não encontrado.');
         }
 
+        // Se veio ?preview=true, mostra inline no navegador
         if ($request->has('preview')) {
             return response()->file($filePath, [
                 'Content-Type' => $file->file_type,
@@ -153,30 +117,33 @@ class HomeController extends Controller
             ]);
         }
 
+        // Caso contrário, força download
         return response()->download($filePath, $file->file_name);
     }
 
-    /**
-     * Visualização inline via iframe
-     */
+
     public function preview($id)
     {
-        $file = UploadedFile::findOrFail($id);
+            $file = UploadedFile::findOrFail($id);
 
+        // Permissão: apenas dono ou compartilhado
         if (!$file->is_shared && Auth::id() !== $file->uploaded_by) {
             abort(403, 'Você não tem permissão para visualizar este arquivo.');
         }
 
+        // Caminho real do arquivo
         $filePath = storage_path('uploads/user_' . $file->uploaded_by . '/' . $file->file_name);
 
         if (!file_exists($filePath)) {
             abort(404, 'Arquivo não encontrado.');
         }
 
+        // URL segura para o iframe (mesma função do download, mas inline)
         $fileUrl = route('files.download', ['id' => $file->id, 'preview' => true]);
 
         return view('preview', compact('file', 'fileUrl'));
     }
+
 
     /**
      * Alterna o estado de compartilhamento do arquivo (somente dono)
@@ -194,4 +161,24 @@ class HomeController extends Controller
 
         return back()->with('success', 'Status de compartilhamento atualizado!');
     }
+
+    public function share($id)
+    {
+        // Pega o arquivo, apenas se ele pertence ao usuário logado
+        $file = UploadedFile::where('id', $id)
+                            ->where('uploaded_by', auth()->user()->id)
+                            ->firstOrFail();
+
+        // Alterna o valor de is_shared
+        $file->is_shared = !$file->is_shared;
+        $file->save();
+
+       return back()->with('share', $file->is_shared 
+            ? 'Arquivo compartilhado com sucesso!' 
+            : 'Arquivo descompartilhado com sucesso!');
+
+    }
+
+    
 }
+

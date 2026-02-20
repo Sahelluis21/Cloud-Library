@@ -1,55 +1,68 @@
-# Usa a imagem base do PHP 8.1 com FPM
-FROM php:8.1-fpm
+# -----------------------
+# PHP 8.3 FPM com Debian Bookworm
+# -----------------------
+FROM php:8.3-fpm-bookworm
 
-# Recebe UID/GID do host (você passa no docker-compose)
+# UID/GID para ambiente local (opcional)
 ARG UID=1000
 ARG GID=1000
 
-# Temporariamente root para instalar dependências
 USER root
 
-# Atualiza pacotes e instala dependências
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Instala dependências do sistema
+RUN apt-get update && apt-get install -y \
     git \
-    unzip \
     curl \
+    zip \
+    unzip \
     libpq-dev \
-    libicu-dev \ 
-    postgresql-client \
-    && docker-php-ext-install pdo pdo_pgsql intl \
-    && rm -rf /var/lib/apt/lists/*
+    libzip-dev \
+    libonig-dev \
+    libxml2-dev \
+    && docker-php-ext-install \
+        pdo \
+        pdo_pgsql \
+        mbstring \
+        zip \
+        intl \
+        xml \
+        opcache \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instala o Composer globalmente
+# Instala Composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin --filename=composer
 
-# Cria usuário de desenvolvimento com UID/GID do host
+# Cria usuário não root
 RUN groupadd -g $GID devgroup \
     && useradd -u $UID -g devgroup -m devuser
 
-# Define o diretório de trabalho
+# Define diretório principal do Laravel
 WORKDIR /var/www/html
 
-# Cria pastas internas necessárias (storage, cache, uploads)
-RUN mkdir -p /var/www/html/storage /var/www/html/storage/logs \
+# Copia toda a aplicação do host para a imagem
+COPY src/ /var/www/html/
+
+# Cria pastas necessárias que podem não existir
+RUN mkdir -p \
+    /var/www/html/storage \
+    /var/www/html/storage/logs \
     /var/www/html/bootstrap/cache \
     /var/www/html/public/uploads
 
-# Ajusta permissões para o usuário devuser
-RUN chown -R devuser:devgroup /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads \
+# Ajusta permissões de todas as pastas críticas
+RUN chown -R devuser:devgroup /var/www/html \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads
 
-# Configura PHP para uploads grandes
+# Configurações de PHP para uploads grandes
 RUN { \
-    echo 'upload_max_filesize = 3072M'; \
-    echo 'post_max_size = 3072M'; \
-    echo 'memory_limit = 1024M'; \
-    echo 'max_execution_time = 3600'; \
-    echo 'max_input_time = 3600'; \
+    echo "upload_max_filesize = 3072M"; \
+    echo "post_max_size = 3072M"; \
+    echo "memory_limit = 1024M"; \
+    echo "max_execution_time = 3600"; \
+    echo "max_input_time = 3600"; \
 } > /usr/local/etc/php/conf.d/uploads.ini
 
-# Define o usuário padrão do container
 USER devuser
 
-# Comando padrão
 CMD ["php-fpm"]
