@@ -11,6 +11,10 @@ O projeto prioriza segurança, segmentação de serviços e arquitetura distribu
 O frontend ainda está em evolução, sendo o foco principal do projeto a arquitetura backend e a infraestrutura.
 
 ---
+## 🎥 Demonstração
+
+![Demonstração da Cloud Library](docs/assets/demo.gif)
+---
 
 ## 🚀 Stack Tecnológica
 
