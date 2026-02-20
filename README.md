@@ -13,7 +13,7 @@ O frontend ainda está em evolução, sendo o foco principal do projeto a arquit
 ---
 ## 🎥 Demonstração
 
-![Demonstração da Cloud Library](docs/assets/CloudLibrary.gif)
+![Demonstração da Cloud Library](https://github.com/Sahelluis21/Cloud-Library/blob/main/docs/assets/Cloud%20Library.gif)
 ---
 
 ## 🚀 Stack Tecnológica
