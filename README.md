@@ -84,6 +84,8 @@ rm -rf vendor
 composer install
 5️⃣ Sair do container
 exit
-
+6️⃣ Ajustar permissões da pasta de uploads
 sudo chown -R $USER:$USER uploads
 sudo chmod -R 775 uploads
+
+Fim da Implantação
